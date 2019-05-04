@@ -1,61 +1,3 @@
-#' Group together close adjacent elements of a vector.
-#'
-#' Given a strictly increasing vector (each element is bigger than the last),
-#' group together stretches of the vector where *adjacent* elements are
-#' separated by at most some specified distance. Hence, each element in each
-#' group has at least one other element in that group that is *close* to
-#' it. See the examples.
-#' @param vec_ascending A strictly increasing numeric vector.
-#' @param max_gap The biggest allowable gap between adjacent elements for them
-#'   to be considered part of the same *group*.
-#' @return A where each element is one group, as a numeric vector.
-#' @examples
-#' group_close(1:10, 1)
-#' group_close(1:10, 0.5)
-#' group_close(c(1, 2, 4, 10, 11, 14, 20, 25, 27), 3)
-#' @noRd
-group_close <- function(vec_ascending, max_gap = 1) {
-  checkmate::assert_numeric(vec_ascending, min.len = 1)
-  test <- diff(vec_ascending) > 0
-  if (anyNA(test) || (!all(test))) {
-    bad_index <- match(F, test)
-    custom_stop(
-      "`vec_ascending` must be strictly increasing.",
-      "
-                Indices {bad_index} and {bad_index + 1} of `vec_ascending`
-                are respectively {vec_ascending[bad_index]} and
-                {vec_ascending[bad_index + 1]}, therefore `vec_ascending`
-                is not strictly increasing.
-                "
-    )
-  }
-  lv <- length(vec_ascending)
-  if (lv == 1) {
-    return(list(vec_ascending))
-  } else {
-    gaps <- vec_ascending[2:lv] - vec_ascending[1:(lv - 1)]
-    big_gaps <- gaps > max_gap
-    nbgaps <- sum(big_gaps) # number of big gaps
-    if (!nbgaps) {
-      return(list(vec_ascending))
-    } else {
-      ends <- which(big_gaps) # vertical end of lines
-      group1 <- vec_ascending[1:ends[1]]
-      lg <- list(group1)
-      if (nbgaps == 1) {
-        lg[[2]] <- vec_ascending[(ends[1] + 1):lv]
-      } else {
-        for (i in 2:nbgaps) {
-          lg[[i]] <- vec_ascending[(ends[i - 1] + 1):ends[i]]
-          ikeep <- i
-        }
-        lg[[ikeep + 1]] <- vec_ascending[(ends[nbgaps] + 1):lv]
-      }
-      return(lg)
-    }
-  }
-}
-
 #' Get the nth element of each vector in a list of numeric or character vectors.
 #'
 #' These are faster implementations of procedures that could very easily be done
@@ -74,7 +16,6 @@ group_close <- function(vec_ascending, max_gap = 1) {
 #' @examples
 #' str_list_nth_elems_(list(c("a", "b", "c"), c("d", "f", "a")), 2)
 #' num_list_nth_elems_(list(1:5, 0:2), 4)
-#'
 #' @noRd
 str_list_nth_elems <- function(char_list, n) {
   checkmate::assert_list(char_list, min.len = 1)
@@ -90,7 +31,7 @@ str_list_nth_elems <- function(char_list, n) {
       your `n` has length {length(n)}.
     ")
   }
-  str_list_nth_elems_(char_list, n)
+  str_list_nth_elems_helper(char_list, n)
 }
 
 
@@ -122,7 +63,7 @@ num_list_nth_elems <- function(num_list, n) {
 #'   console.
 #'
 #' @noRd
-custom_stop_bullet <- function(string) {
+custom_bullet <- function(string) {
   checkmate::assert_string(string)
   string %<>% strwrap(width = 57)
   string[1] %<>% {
@@ -134,6 +75,24 @@ custom_stop_bullet <- function(string) {
     }
   }
   glue::glue_collapse(string, sep = "\n")
+}
+
+custom_condition_prep <- function(main_message, ..., .envir = parent.frame()) {
+  checkmate::assert_string(main_message)
+  main_message %<>% glue::glue(.envir = .envir)
+  out <- strwrap(main_message, width = 63)
+  dots <- unlist(list(...))
+  if (length(dots)) {
+    if (!is.character(dots)) {
+      stop("\nThe arguments in ... must all be of character type.")
+    }
+    dots %<>% vapply(glue::glue, character(1), .envir = .envir) %>%
+      vapply(custom_bullet, character(1))
+    out %<>% {
+      glue::glue_collapse(c(., dots), sep = "\n")
+    }
+  }
+  out
 }
 
 #' Nicely formatted error message.
@@ -148,38 +107,84 @@ custom_stop_bullet <- function(string) {
 #'
 #' @noRd
 custom_stop <- function(main_message, ..., .envir = parent.frame()) {
-  checkmate::assert_string(main_message)
-  main_message %<>% glue::glue(.envir = .envir)
-  out <- strwrap(main_message, width = 63)
-  dots <- unlist(list(...))
-  if (length(dots)) {
-    if (!is.character(dots)) {
-      stop("\nThe arguments in ... must all be of character type.")
-    }
-    dots %<>% purrr::map_chr(glue::glue, .envir = .envir) %>%
-      purrr::map_chr(custom_stop_bullet)
-    out %<>% {
-      glue::glue_collapse(c(., dots), sep = "\n")
-    }
-  }
-  rlang::abort(glue::glue("{out}"))
+  rlang::abort(custom_condition_prep(main_message, ..., .envir = .envir))
 }
 
-get_os <- function() {
-  sysinf <- Sys.info()
-  if (!is.null(sysinf)) {
-    os <- sysinf["sysname"]
-    if (os == "Darwin") {
-      os <- "mac"
-    }
-  } else { ## mystery machine
-    os <- .Platform$OS.type
-    if (grepl("^darwin", R.version$os)) {
-      os <- "mac"
-    }
-    if (grepl("linux-gnu", R.version$os)) {
-      os <- "linux"
-    }
+custom_warn <- function(main_message, ..., .envir = parent.frame()) {
+  rlang::warn(custom_condition_prep(main_message, ..., .envir = .envir))
+}
+
+#' Generate an error due to an incompatible combination of arguemnt lengths.
+#'
+#' @param string A character vector.
+#' @param sym Another argument to a strex function.
+#' @param replacement_sym A string to replace sym in the error message.
+#'
+#' @noRd
+err_string_len <- function(string, sym, replacement_sym = NULL) {
+  sym_sym <- rlang::enexpr(sym)
+  sym_str <- as.character(sym_sym)
+  if (!is.null(replacement_sym)) sym_str <- replacement_sym
+  sym_len <- length(sym)
+  custom_stop(
+    "
+    When `string` has length greater than 1,
+    `{sym_str}` must either be length 1 or have the same length as `string`.
+    ",
+    "Your `string` has length {length(string)}.",
+    "Your `{sym_str}` has length {sym_len}."
+
+  )
+}
+
+verify_string_pattern <- function(string, pattern) {
+  checkmate::assert_character(string, min.len = 1)
+  checkmate::assert_character(pattern, min.len = 1)
+  if (length(pattern) > 1 && length(string) > 1 &&
+      length(pattern) != length(string))
+    err_string_len(string, pattern)
+  invisible(TRUE)
+}
+
+verify_string_n <- function(string, n, replacement_n_sym = NULL) {
+  checkmate::assert_character(string, min.len = 1)
+  checkmate::assert_integerish(n, min.len = 1)
+  if (length(n) > 1 && length(string) > 1 &&
+      length(n) != length(string))
+    err_string_len(string, n, replacement_n_sym)
+  invisible(TRUE)
+}
+
+verify_string_pattern_n <- function(string, pattern, n,
+                                    replacement_n_sym = NULL) {
+  verify_string_pattern(string, pattern)
+  verify_string_n(string, n, replacement_n_sym)
+  n_sym_str <- "n"
+  if (!is.null(replacement_n_sym)) n_sym_str <- replacement_n_sym
+  if (length(pattern) > 1 && length(n) > 1 &&
+      length(pattern) != length(n)) {
+    custom_stop("
+                If `pattern` and `{n_sym_str}` both have length greater than 1,
+                their lengths must be equal.
+                ",
+                "Your `pattern` has length {length(pattern)}.",
+                "Your `{n_sym_str}` has length {length(n)}.")
   }
-  tolower(os)
+  invisible(TRUE)
+}
+
+verify_string_pattern_n_m <- function(string, pattern, n, m) {
+  verify_string_pattern_n(string, pattern, n)
+  checkmate::assert_integerish(m, min.len = 1)
+  verify_string_pattern_n(string, pattern, m, "m")
+  if (length(n) > 1 && length(m) > 1 &&
+      length(n) != length(m)) {
+    custom_stop("
+                If `n` and `m` both have length greater than 1,
+                their lengths must be equal.
+                ",
+                "Your `n` has length {length(n)}.",
+                "Your `m` has length {length(m)}.")
+  }
+  invisible(TRUE)
 }

@@ -7,7 +7,7 @@
 str_trim_anything(string, pattern, side = "both")
 }
 \arguments{
-\item{string}{A string.}
+\item{string}{A character vector.}
 
 \item{pattern}{A string. The pattern to be trimmed (\emph{not} interpreted as
 regular expression). So to trim a period, use \code{char = "."} and not
@@ -30,4 +30,10 @@ side(s).
 str_trim_anything("..abcd.", ".", "left")
 str_trim_anything("-ghi--", "-")
 str_trim_anything("-ghi--", "--")
+
 }
+\seealso{
+Other removers: \code{\link{str_remove_quoted}},
+  \code{\link{str_singleize}}
+}
+\concept{removers}

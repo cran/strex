@@ -1,5 +1,3 @@
-context("nth number before mth pattern")
-
 test_that("`nth_number_before_mth()` works", {
   string <- c(
     "abc1abc2abc3abc4def5abc6abc7abc8abc9",
@@ -15,4 +13,5 @@ test_that("`nth_number_before_mth()` works", {
   expect_equal(str_first_number_before_last(string, "def"), c(1, 1))
   expect_equal(str_last_number_before_first(string, "def"), c(4, 1))
   expect_equal(str_last_number_before_last(string, "def"), c(4, 7))
+  expect_equal(str_first_number_before_last(character(), "def"), numeric())
 })

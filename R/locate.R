@@ -4,34 +4,48 @@
 #'
 #' @param string A character vector
 #'
-#' @return A list of data frames, one for each member of the string character
-#'   vector. Each data frame has a "position" and "brace" column which give the
-#'   positions and types of braces in the given string.
+#' @return A [tibble][tibble::tibble-package] with 4 columns: `string_num`,
+#'   `string`, `position` and `brace`. Every extracted brace amount gets its
+#'   own row in the tibble detailing the string number and string that it was
+#'   extracted from, the position in its string and the brace.
 #'
 #' @examples
 #' str_locate_braces(c("a{](kkj)})", "ab(]c{}"))
+#'
+#' @family locators
 #' @export
 str_locate_braces <- function(string) {
-  locations <- str_locate_all(string, "[\\(\\)\\[\\]\\{\\}]") %>%
+  checkmate::assert_character(string)
+  if (all_equal(string, character())) {
+    out <- list(string_num = integer(),
+                string = character(),
+                position = integer(),
+                brace = character()) %>%
+      tibble::new_tibble(nrow = 0)
+    return(out)
+  }
+  pattern <- "[\\(\\)\\[\\]\\{\\}]"
+  locations <- str_locate_all(string, pattern) %>%
     int_lst_first_col()
-  braces <- str_elems(string, locations)
-  lst_df_pos_brace(locations, braces)
+  braces <- str_extract_all(string, pattern)
+  string_num <- rep(seq_along(string), lengths(braces))
+  list(
+    string_num = string_num, string = string[string_num],
+    position = unlist(locations), brace = unlist(braces)
+  ) %>%
+    tibble::new_tibble(nrow = length(string_num))
 }
 
-#' Locate the indices of the \eqn{n}th instance of a pattern.
+#' Locate the indices of the `n`th instance of a pattern.
 #'
-#' The \eqn{n}th instance of an pattern will cover a series of character
-#' indices. These functions tell you which indices those are.
+#' The `n`th instance of an pattern will cover a series of character
+#' indices. These functions tell you which indices those are. These functions
+#' are vectorised over all arguments.
 #'
-#' \itemize{ \item `str_locate_first(...)` is just
-#' `str_locate_nth(..., n = 1)`. \item
-#' `str_locate_last(...)` is just `str_locate_nth(..., n =
-#' -1)`. }
+#' \itemize{ \item `str_locate_first(...)` is just `str_locate_nth(..., n = 1)`.
+#' \item `str_locate_last(...)` is just `str_locate_nth(..., n = -1)`. }
 #'
-#' @param string A character vector. These functions are vectorized over this
-#'   argument.
-#' @inheritParams str_singleize
-#' @param n Then \eqn{n} for the \eqn{n}th instance of the pattern.
+#' @inheritParams str_after_nth
 #'
 #' @return A two-column matrix. The \eqn{i}th row of this matrix gives the start
 #'   and end indices of the \eqn{n}th instance of `pattern` in the \eqn{i}th
@@ -39,42 +53,51 @@ str_locate_braces <- function(string) {
 #'
 #' @examples
 #' str_locate_nth(c("abcdabcxyz", "abcabc"), "abc", 2)
+#' str_locate_nth(c("This old thing.", "That beautiful thing there."),
+#' "\\w+", c(2, -2))
+#' str_locate_nth("abc", "b", c(0, 1, 1, 2))
 #'
+#' @family locators
 #' @export
 str_locate_nth <- function(string, pattern, n) {
-  checkmate::assert_number(n)
-  checkmate::assert_number(abs(n), lower = 1)
-  instances <- str_locate_all(string, pattern)
-  n_instances <- lengths(instances) / 2
-  bad <- n_instances < abs(n)
-  if (any(bad)) {
-    first_bad <- match(T, bad)
-    custom_stop("
-      There aren't {abs(n)} instances of your `pattern`, \"{pattern}\" in one or
-      more of the strings.
-      ", "
-      The first such bad string is string {first_bad} \"{string[first_bad]}\"
-      which has {n_instances[first_bad]} instances.
-      ")
+  if (all_equal(string, character(0))) {
+    out <- matrix(character(), ncol = 2) %>%
+      magrittr::set_colnames(c("start", "end"))
+    return(out)
   }
-  l <- length(string)
-  if (n > 0) {
-    n %<>% rep(l)
-  } else {
-    n <- n_instances + n + 1
+  verify_string_pattern_n(string, pattern, n)
+  locs <- str_locate_all(string, pattern)
+  locs_n_matches <- lengths(locs) / 2
+  n_negs <- n < 0
+  if (any(n_negs)) {
+    if (length(n) == 1) {
+      n <- locs_n_matches + n + 1
+    } else {
+      n[n_negs] <- locs_n_matches[n_negs] + n[n_negs] + 1
+    }
   }
-  intmat_list_bind_nth_rows(instances, n - 1) %>%
+  out <- matrix(NA_integer_, nrow = max(lengths(list(string, pattern, n))), ncol = 2) %>%
     magrittr::set_colnames(c("start", "end"))
+  good <- (abs(n) <= locs_n_matches) & (n != 0)
+  if (any(good)) {
+    if (length(locs) == 1) {
+      out[good, ] <- lst_rbind_nth_rows(locs, n[good])
+    } else {
+      if (length(n) > 1) n <- n[good]
+      out[good, ] <- lst_rbind_nth_rows(locs[good], n)
+    }
+  }
+  out
 }
 
 #' @rdname str_locate_nth
 #' @export
 str_locate_first <- function(string, pattern) {
-  str_locate_nth(string = string, pattern = pattern, n = 1)
+  str_locate_nth(string, pattern, n = 1)
 }
 
 #' @rdname str_locate_nth
 #' @export
 str_locate_last <- function(string, pattern) {
-  str_locate_nth(string = string, pattern = pattern, n = -1)
+  str_locate_nth(string, pattern, n = -1)
 }

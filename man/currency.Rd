@@ -2,36 +2,61 @@
 % Please edit documentation in R/currency.R
 \name{currency}
 \alias{currency}
-\alias{str_get_currencies}
-\alias{str_get_currency}
-\title{Get the currencies of numbers within a string.}
+\alias{str_extract_currencies}
+\alias{str_nth_currency}
+\alias{str_first_currency}
+\alias{str_last_currency}
+\title{Extract currency amounts from a string.}
 \usage{
-str_get_currencies(string)
+str_extract_currencies(string)
 
-str_get_currency(string)
+str_nth_currency(string, n)
+
+str_first_currency(string)
+
+str_last_currency(string)
 }
 \arguments{
-\item{string}{A string for \code{get_currencies()} and a character vector for
-\code{get_currency()}.}
+\item{string}{A character vector.}
+
+\item{n}{A vector of integerish values. Must be either length 1 or
+have length equal to the length of \code{string}. Negative indices count from
+the back: while \code{n = 1} and \code{n = 2} correspond to first and second, \code{n = -1} and \code{n = -2} correspond to last and second-last. \code{n = 0} will return
+\code{NA}.}
 }
 \value{
-\itemize{ \item \code{get_currency} returns a character vector. \item
-\code{get_currencies} returns a data frame with one column for the currency symbol
-and one for the amount. }
+A \link[tibble:tibble-package]{tibble} with 4 columns: \code{string_num},
+\code{string}, \code{curr_sym} and \code{amount}. Every extracted currency amount gets its
+own row in the tibble detailing the string number and string that it was
+extracted from, the currency symbol and the amount.
 }
 \description{
 The currency of a number is defined as the character coming before the number
 in the string. If nothing comes before (i.e. if the number is the first thing
 in the string), the currency is the empty string, similarly the currency can
-be a space, comma or any manner of thing. \itemize{ \item \code{get_currency}
-takes a string and returns the currency of the first number therein. It is
-vectorized over string. \item \code{get_currencies} takes a string and returns the
-currencies of all of the numbers within that string. It is not vectorized. }
+be a space, comma or any manner of thing.
 }
 \details{
-These functions do not allow for leading decimal points.
+These functions are vectorized over \code{string} and \code{n}.
+
+\code{\link[=str_extract_currencies]{str_extract_currencies()}} extracts all currency amounts.
+
+\code{str_nth_currency()} just gets the \code{n}th currency amount from each string.
+\code{str_first_currency(string)} and \code{str_last_currency(string)} are just
+wrappers for \code{str_nth_currency(string, n = 1)} and \code{str_nth_currency(string, n = -1)}.
+
+"-$2.00" and "$-2.00" are interpreted as negative two dollars.
+
+If you request e.g. the 5th currency amount but there are only 3 currency
+amounts, you get an amount and currency symbol of \code{NA}.
 }
 \examples{
-str_get_currencies("35.00 $1.14 abc5 $3.8 77")
-str_get_currency(c("ab3 13", "$1"))
+string <- c("ab3 13", "$1", "35.00 $1.14", "abc5 $3.8", "stuff")
+str_extract_currencies(string)
+str_nth_currency(string, n = 2)
+str_nth_currency(string, n = -2)
+str_nth_currency(string, c(1, -2, 1, 2, -1))
+str_first_currency(string)
+str_last_currency(string)
 }
+\concept{currency extractors}

@@ -1,8 +1,7 @@
 #' Argument Matching.
 #'
-#' Match `arg` against a series of candidate `choices` where `NULL` means take
-#' the first one. `arg` _matches_ an element of `choices` if `arg` is a prefix
-#' of that element.
+#' Match `arg` against a series of candidate `choices`. `arg` _matches_ an
+#' element of `choices` if `arg` is a prefix of that element.
 #'
 #' `ERROR`s are thrown when a match is not made and where the match is
 #' ambiguous. However, sometimes ambiguities are inevitable. Consider the case
@@ -11,12 +10,21 @@
 #' need to provide a full match, i.e. using `arg = "ab"` will get you `"ab"`
 #' without an error, however `arg = "a"` will throw an ambiguity error.
 #'
+#' When `choices` is `NULL`, the `choices` are obtained from a default setting
+#' for the formal argument `arg` of the function from which `str_match_arg` was
+#' called. This is consistent with `base::match.arg()`. See the examples for
+#' details.
+#'
+#' When `arg` and `choices` are identical and `several_ok = FALSE`, the first
+#' element of `choices` is returned. This is consistent with
+#' `base::match.arg()`.
+#'
 #' This function inspired by `RSAGA::match.arg.ext()`. Its behaviour is almost
 #' identical (the difference is that `RSAGA::match.arg.ext(..., ignore.case =
-#' TRUE)` guarantees that the function returns strings in all lower case, but
-#' that is not so with `filesstrings::match_arg(..., ignore_case = TRUE)`) but
-#' `RSAGA` is a heavy package to depend upon so `filesstrings::match_arg()`
-#' might be handy for package developers.
+#' TRUE)` always returns in all lower case; `strex::match_arg(..., ignore_case =
+#' TRUE)` ignores case while matching but returns the element of `choices` in
+#' its original case). `RSAGA` is a heavy package to depend upon so
+#' `strex::match_arg()` is handy for package developers.
 #'
 #' This function is designed to be used inside of other functions. It's fine to
 #' use it for other purposes, but the error messages might be a bit weird.
@@ -24,30 +32,84 @@
 #' @param arg A character vector (of length one unless `several_ok = TRUE`).
 #' @param choices A character vector of candidate values.
 #' @param index Return the index of the match rather than the match itself?
-#'   Default no.
 #' @param several_ok Allow `arg` to have length greater than one to match
-#'   several arguments at once? Default no.
-#' @param ignore_case Ignore case while matching. Default no. If this is `TRUE`,
-#'   the returned value is the matched element of `choices` (with its original
+#'   several arguments at once?
+#' @param ignore_case Ignore case while matching. If this is `TRUE`, the
+#'   returned value is the matched element of `choices` (with its original
 #'   casing).
 #'
 #' @examples
 #' choices <- c("Apples", "Pears", "Bananas", "Oranges")
-#' match_arg(NULL, choices)
 #' match_arg("A", choices)
 #' match_arg("B", choices, index = TRUE)
 #' match_arg(c("a", "b"), choices, several_ok = TRUE, ignore_case = TRUE)
-#' match_arg(c("b", "a"), choices, ignore_case = TRUE, index = TRUE,
-#'           several_ok = TRUE)
+#' match_arg(c("b", "a"), choices,
+#'   ignore_case = TRUE, index = TRUE,
+#'   several_ok = TRUE
+#' )
+#' myword <- function(w = c("abacus", "baseball", "candy")) {
+#'   w <- match_arg(w)
+#'   w
+#' }
+#' myword("b")
+#' myword()
+#' myword <- function(w = c("abacus", "baseball", "candy")) {
+#'   w <- match_arg(w, several_ok = TRUE)
+#'   w
+#' }
+#' myword("c")
+#' myword()
 #'
+#' @family argument matchers
 #' @export
-str_match_arg <- function(arg, choices, index = FALSE, several_ok = FALSE,
-                          ignore_case = FALSE) {
+str_match_arg <- function(arg, choices = NULL, index = FALSE,
+                          several_ok = FALSE, ignore_case = FALSE) {
+  if (is.null(choices)) {
+    arg_sym <- rlang::enexpr(arg)
+    null_choice_err <- FALSE
+    if (!rlang::is_symbol(arg_sym)) null_choice_err <- TRUE
+    if (!null_choice_err) {
+      formal_args <- formals(sys.function(sys_p <- sys.parent()))
+      arg_sym %<>% as.character()
+      default_arg_names <- formal_args %>% {
+        names(.)[as.logical(str_length(as.character(.)))]
+      }
+      if (matrixStats::anyValue(default_arg_names, value = arg_sym)) {
+        choices <- eval(formal_args[[arg_sym]], envir = sys.frame(sys_p))
+        if (is.character(choices)) {
+          return(str_match_arg(arg, choices = choices, index = index,
+                               several_ok = several_ok,
+                               ignore_case = ignore_case))
+        } else {
+          null_choice_err <- TRUE
+        }
+      } else {
+        null_choice_err <- TRUE
+      }
+    }
+    if (null_choice_err) {
+      fun <- as.character(match.call())[[1]]
+      custom_stop(
+        "You have used `{fun}()` without specifying a `choices` argument. ",
+        "
+        The only way to do this is from another function where `arg` has a
+        default setting. This is the same as `base::match.arg()`.
+        ", "
+        See the man page for `{fun}()`, particularly the examples:
+        enter `help(\"{fun}\", package = \"strex\")` at the R console.
+        ", "
+        See also the vignette on argument matching:
+        enter `vignette(\"argument-matching\", package = \"strex\")`
+        at the R console.
+        "
+      )
+    }
+  }
+  checkmate::assert_character(arg, min.len = 1)
   checkmate::assert_character(choices, min.len = 1)
   checkmate::assert_flag(index)
   checkmate::assert_flag(several_ok)
   checkmate::assert_flag(ignore_case)
-  if (is.null(arg)) return(choices[1])
   checkmate::assert_character(arg, min.len = 1)
   first_dup <- anyDuplicated(choices)
   if (first_dup) {
@@ -76,6 +138,7 @@ str_match_arg <- function(arg, choices, index = FALSE, several_ok = FALSE,
   }
   arg_len <- length(arg)
   if ((!several_ok) && arg_len > 1) {
+    if (all_equal(arg, choices)) return(choices[[1]])
     custom_stop(
       "`arg` must have length 1.",
       "Your `arg` has length {arg_len}.",
@@ -131,9 +194,7 @@ str_match_arg <- function(arg, choices, index = FALSE, several_ok = FALSE,
       )
     }
   }
-  indices %<>% {
-    . + 1
-  }
+  indices <- indices + 1
   if (index) return(indices)
   choices[indices]
 }

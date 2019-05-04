@@ -7,7 +7,7 @@
 str_elem(string, index)
 }
 \arguments{
-\item{string}{A string.}
+\item{string}{A character vector.}
 
 \item{index}{An integer. Negative indexing is allowed as in
 \code{\link[stringr:str_sub]{stringr::str_sub()}}.}
@@ -16,9 +16,17 @@ str_elem(string, index)
 A one-character string.
 }
 \description{
-If the element does not exist, this function returns the empty string.
+If the element does not exist, this function returns the empty string. This
+is consistent with \code{\link[stringr:str_sub]{stringr::str_sub()}}. This function is vectorised over
+both arguments.
 }
 \examples{
 str_elem(c("abcd", "xyz"), 3)
 str_elem("abcd", -2)
+
 }
+\seealso{
+Other single element extractors: \code{\link{str_elems}},
+  \code{\link{str_paste_elems}}
+}
+\concept{single element extractors}

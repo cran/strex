@@ -2,22 +2,11 @@
 % Please edit documentation in R/extract-non-nums.R
 \name{str_extract_non_numerics}
 \alias{str_extract_non_numerics}
-\alias{str_nth_non_numeric}
-\alias{str_first_non_numeric}
-\alias{str_last_non_numeric}
 \title{Extract non-numbers from a string.}
 \usage{
 str_extract_non_numerics(string, decimals = FALSE,
-  leading_decimals = FALSE, negs = FALSE)
-
-str_nth_non_numeric(string, n, decimals = FALSE,
-  leading_decimals = FALSE, negs = FALSE)
-
-str_first_non_numeric(string, decimals = FALSE,
-  leading_decimals = FALSE, negs = FALSE)
-
-str_last_non_numeric(string, decimals = FALSE,
-  leading_decimals = FALSE, negs = FALSE)
+  leading_decimals = decimals, negs = FALSE, sci = FALSE,
+  commas = FALSE)
 }
 \arguments{
 \item{string}{A string.}
@@ -31,19 +20,17 @@ the start of a number?}
 \item{negs}{Do you want to allow negative numbers? Note that double negatives
 are not handled here (see the examples).}
 
-\item{n}{The index of the number (or non-numeric) that you seek. Negative
-indexing is allowed i.e. \code{n = 1} (the default) will give you the first
-number (or non-numeric) whereas \code{n = -1} will give you the last number (or
-non-numeric), \code{n = -2} will give you the second last number and so on. The
-function is vectorized over this argument.}
+\item{sci}{Make the search aware of scientific notation e.g. 2e3 is the same
+as 2000.}
+
+\item{commas}{Allow comma separators in numbers (i.e. interpret 1,100 as a
+single number (one thousand one hundred) rather than two numbers (one and
+one hundred)).}
 }
 \description{
-\code{str_extract_non_numerics} extracts the bits of the string that aren't
-extracted by \code{extract_numbers}. \code{str_nth_non_numeric} is a convenient wrapper
-for \code{str_extract_non_numerics}, allowing you to choose which number you want.
-Please run the examples at the bottom of this page to ensure that you
-understand how these functions work, and their limitations. These functions
-are vectorized over \code{string}.
+Extract the non-numeric bits of a string where numbers are optionally defined
+with decimals, scientific notation and commas (as separators, not as an
+alternative to the decimal point).
 }
 \details{
 \itemize{ \item \code{str_first_non_numeric(...)} is just
@@ -51,17 +38,25 @@ are vectorized over \code{string}.
 \code{str_nth_non_numeric(..., n = -1)}. }
 }
 \examples{
-str_extract_non_numerics("abc123abc456")
-str_extract_non_numerics("abc1.23abc456")
-str_extract_non_numerics("abc1.23abc456", decimals = TRUE)
-str_extract_non_numerics("abc1..23abc456", decimals = TRUE)
-str_extract_non_numerics("abc1..23abc456", decimals = TRUE,
-                     leading_decimals = TRUE)
-str_extract_non_numerics(c("-123abc456", "ab1c"))
-str_extract_non_numerics("-123abc456", negs = TRUE)
-str_extract_non_numerics("--123abc456", negs = TRUE)
-str_extract_non_numerics("--123abc456", negs = TRUE)
-str_nth_non_numeric("--123abc456", 1)
-str_nth_non_numeric("--123abc456", -2)
+strings <- c(
+  "abc123def456", "abc-0.12def.345", "abc.12e4def34.5e9",
+  "abc1,100def1,230.5", "abc1,100e3,215def4e1,000"
+)
+str_extract_non_numerics(strings)
+str_extract_non_numerics(strings, decimals = TRUE, leading_decimals = FALSE)
+str_extract_non_numerics(strings, decimals = TRUE)
+str_extract_non_numerics(strings, commas = TRUE)
+str_extract_non_numerics(strings,
+  decimals = TRUE, leading_decimals = TRUE,
+  sci = TRUE
+)
+str_extract_non_numerics(strings,
+  decimals = TRUE, leading_decimals = TRUE,
+  sci = TRUE, commas = TRUE, negs = TRUE
+)
 
 }
+\seealso{
+Other non-numeric extractors: \code{\link{str_nth_non_numeric}}
+}
+\concept{non-numeric extractors}

@@ -5,10 +5,10 @@
 \alias{match_arg}
 \title{Argument Matching.}
 \usage{
-str_match_arg(arg, choices, index = FALSE, several_ok = FALSE,
+str_match_arg(arg, choices = NULL, index = FALSE, several_ok = FALSE,
   ignore_case = FALSE)
 
-match_arg(arg, choices, index = FALSE, several_ok = FALSE,
+match_arg(arg, choices = NULL, index = FALSE, several_ok = FALSE,
   ignore_case = FALSE)
 }
 \arguments{
@@ -16,20 +16,18 @@ match_arg(arg, choices, index = FALSE, several_ok = FALSE,
 
 \item{choices}{A character vector of candidate values.}
 
-\item{index}{Return the index of the match rather than the match itself?
-Default no.}
+\item{index}{Return the index of the match rather than the match itself?}
 
 \item{several_ok}{Allow \code{arg} to have length greater than one to match
-several arguments at once? Default no.}
+several arguments at once?}
 
-\item{ignore_case}{Ignore case while matching. Default no. If this is \code{TRUE},
-the returned value is the matched element of \code{choices} (with its original
+\item{ignore_case}{Ignore case while matching. If this is \code{TRUE}, the
+returned value is the matched element of \code{choices} (with its original
 casing).}
 }
 \description{
-Match \code{arg} against a series of candidate \code{choices} where \code{NULL} means take
-the first one. \code{arg} \emph{matches} an element of \code{choices} if \code{arg} is a prefix
-of that element.
+Match \code{arg} against a series of candidate \code{choices}. \code{arg} \emph{matches} an
+element of \code{choices} if \code{arg} is a prefix of that element.
 }
 \details{
 \code{ERROR}s are thrown when a match is not made and where the match is
@@ -39,22 +37,44 @@ because \code{"ab"} is a prefix for \code{"ab"} and \code{"abc"}. If this is the
 need to provide a full match, i.e. using \code{arg = "ab"} will get you \code{"ab"}
 without an error, however \code{arg = "a"} will throw an ambiguity error.
 
+When \code{choices} is \code{NULL}, the \code{choices} are obtained from a default setting
+for the formal argument \code{arg} of the function from which \code{str_match_arg} was
+called. This is consistent with \code{base::match.arg()}. See the examples for
+details.
+
+When \code{arg} and \code{choices} are identical and \code{several_ok = FALSE}, the first
+element of \code{choices} is returned. This is consistent with
+\code{base::match.arg()}.
+
 This function inspired by \code{RSAGA::match.arg.ext()}. Its behaviour is almost
-identical (the difference is that \code{RSAGA::match.arg.ext(..., ignore.case = TRUE)} guarantees that the function returns strings in all lower case, but
-that is not so with \code{filesstrings::match_arg(..., ignore_case = TRUE)}) but
-\code{RSAGA} is a heavy package to depend upon so \code{filesstrings::match_arg()}
-might be handy for package developers.
+identical (the difference is that \code{RSAGA::match.arg.ext(..., ignore.case = TRUE)} always returns in all lower case; \code{strex::match_arg(..., ignore_case = TRUE)} ignores case while matching but returns the element of \code{choices} in
+its original case). \code{RSAGA} is a heavy package to depend upon so
+\code{strex::match_arg()} is handy for package developers.
 
 This function is designed to be used inside of other functions. It's fine to
 use it for other purposes, but the error messages might be a bit weird.
 }
 \examples{
 choices <- c("Apples", "Pears", "Bananas", "Oranges")
-match_arg(NULL, choices)
 match_arg("A", choices)
 match_arg("B", choices, index = TRUE)
 match_arg(c("a", "b"), choices, several_ok = TRUE, ignore_case = TRUE)
-match_arg(c("b", "a"), choices, ignore_case = TRUE, index = TRUE,
-          several_ok = TRUE)
+match_arg(c("b", "a"), choices,
+  ignore_case = TRUE, index = TRUE,
+  several_ok = TRUE
+)
+myword <- function(w = c("abacus", "baseball", "candy")) {
+  w <- match_arg(w)
+  w
+}
+myword("b")
+myword()
+myword <- function(w = c("abacus", "baseball", "candy")) {
+  w <- match_arg(w, several_ok = TRUE)
+  w
+}
+myword("c")
+myword()
 
 }
+\concept{argument matchers}

@@ -7,7 +7,7 @@
 str_to_vec(string)
 }
 \arguments{
-\item{string}{A string.}
+\item{string}{A character vector.}
 }
 \value{
 A character vector.
@@ -18,4 +18,6 @@ character in the string.
 }
 \examples{
 str_to_vec("abcdef")
+
 }
+\concept{converters}

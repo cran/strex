@@ -2,28 +2,14 @@
 % Please edit documentation in R/extract-nums.R
 \name{str_extract_numbers}
 \alias{str_extract_numbers}
-\alias{str_nth_number}
-\alias{str_first_number}
-\alias{str_last_number}
 \title{Extract numbers from a string.}
 \usage{
-str_extract_numbers(string, leave_as_string = FALSE, decimals = FALSE,
-  leading_decimals = FALSE, negs = FALSE)
-
-str_nth_number(string, n, leave_as_string = FALSE, decimals = FALSE,
-  leading_decimals = FALSE, negs = FALSE)
-
-str_first_number(string, leave_as_string = FALSE, decimals = FALSE,
-  leading_decimals = FALSE, negs = FALSE)
-
-str_last_number(string, leave_as_string = FALSE, decimals = FALSE,
-  leading_decimals = FALSE, negs = FALSE)
+str_extract_numbers(string, decimals = FALSE,
+  leading_decimals = decimals, negs = FALSE, sci = FALSE,
+  commas = FALSE, leave_as_string = FALSE)
 }
 \arguments{
 \item{string}{A string.}
-
-\item{leave_as_string}{Do you want to return the number as a string (\code{TRUE})
-or as numeric (\code{FALSE}, the default)?}
 
 \item{decimals}{Do you want to include the possibility of decimal numbers
 (\code{TRUE}) or not (\code{FALSE}, the default).}
@@ -34,49 +20,67 @@ the start of a number?}
 \item{negs}{Do you want to allow negative numbers? Note that double negatives
 are not handled here (see the examples).}
 
-\item{n}{The index of the number (or non-numeric) that you seek. Negative
-indexing is allowed i.e. \code{n = 1} (the default) will give you the first
-number (or non-numeric) whereas \code{n = -1} will give you the last number (or
-non-numeric), \code{n = -2} will give you the second last number and so on. The
-function is vectorized over this argument.}
+\item{sci}{Make the search aware of scientific notation e.g. 2e3 is the same
+as 2000.}
+
+\item{commas}{Allow comma separators in numbers (i.e. interpret 1,100 as a
+single number (one thousand one hundred) rather than two numbers (one and
+one hundred)).}
+
+\item{leave_as_string}{Do you want to return the number as a string (\code{TRUE})
+or as numeric (\code{FALSE}, the default)?}
 }
 \value{
-For \code{str_extract_numbers} and \code{extract_non_numerics}, a list of
+For \code{str_extract_numbers} and \code{str_extract_non_numerics}, a list of
 numeric or character vectors, one list element for each element of
-\code{string}. For \code{str_nth_number} and \code{nth_non_numeric}, a vector the same
-length as \code{string} (as in \code{length(string)}, not \code{nchar(string)}).
+\code{string}. For \code{str_nth_number} and \code{str_nth_non_numeric}, a numeric or
+character vector the same length as the vector \code{string}.
 }
 \description{
-\code{str_extract_numbers} extracts the numbers (or non-numbers) from a string
-where decimals are optionally allowed. \code{str_nth_number} is a convenient
-wrapper for \code{str_extract_numbers}, allowing you to choose which number you
-want. Please run the examples at the bottom of this page to ensure that you
-understand how these functions work, and their limitations. These functions
-are vectorized over \code{string}.
+Extract the numbers from a string, where decimals, scientific notation and
+commas (as separators, not as an alternative to the decimal point) are
+optionally allowed.
 }
 \details{
 If any part of a string contains an ambiguous number (e.g. \code{1.2.3} would be
 ambiguous if \code{decimals = TRUE} (but not otherwise)), the value returned for
-that string will be \code{NA}. Note that these functions do not know about
-scientific notation (e.g. \code{1e6} for 1000000).
+that string will be \code{NA} and a \code{warning} will be issued.
 
-\itemize{ \item \code{str_first_number(...)} is just \code{str_nth_number(..., n = 1)}.
-\item \code{str_last_number(...)} is just \code{str_nth_number(..., n = -1)}. }
+With scientific notation, it is assumed that the exponent is not a decimal
+number e.g. \code{2e2.4} is unacceptable. Commas, however, are acceptable in the
+exponent, so 2e1,100 is fine and equal to 2e1100 if the option to allow
+commas in numbers has been turned on.
+
+Numbers outside the double precision floating point range (i.e. with absolute
+value greater than 1.797693e+308) are read as \code{Inf} (or \code{-Inf} if they begin
+with a minus sign). This is what \code{base::as.numeric()} does.
 }
 \examples{
-str_extract_numbers(c("abc123abc456", "abc1.23abc456"))
-str_extract_numbers(c("abc1.23abc456", "abc1..23abc456"), decimals = TRUE)
-str_extract_numbers("abc1..23abc456", decimals = TRUE)
-str_extract_numbers("abc1..23abc456", decimals = TRUE, leading_decimals = TRUE)
-str_extract_numbers("abc1..23abc456", decimals = TRUE, leading_decimals = TRUE,
-                leave_as_string = TRUE)
-str_extract_numbers("-123abc456")
-str_extract_numbers("-123abc456", negs = TRUE)
-str_extract_numbers("--123abc456", negs = TRUE)
-str_extract_numbers(c(rep("abc1.2.3", 2), "a1b2.2.3", "e5r6"), decimals = TRUE)
-str_extract_numbers("ab.1.2", decimals = TRUE, leading_decimals = TRUE)
-str_nth_number("abc1.23abc456", 2:3)
-str_nth_number("abc1.23abc456", 2, decimals = TRUE)
-str_nth_number("-123abc456", -2, negs = TRUE)
+strings <- c(
+  "abc123def456", "abc-0.12def.345", "abc.12e4def34.5e9",
+  "abc1,100def1,230.5", "abc1,100e3,215def4e1,000"
+)
+str_extract_numbers(strings)
+str_extract_numbers(strings, decimals = TRUE)
+str_extract_numbers(strings, decimals = TRUE, leading_decimals = TRUE)
+str_extract_numbers(strings, commas = TRUE)
+str_extract_numbers(strings,
+  decimals = TRUE, leading_decimals = TRUE,
+  sci = TRUE
+)
+str_extract_numbers(strings,
+  decimals = TRUE, leading_decimals = TRUE,
+  sci = TRUE, commas = TRUE, negs = TRUE
+)
+str_extract_numbers(strings,
+  decimals = TRUE, leading_decimals = FALSE,
+  sci = FALSE, commas = TRUE, leave_as_string = TRUE
+)
 
 }
+\seealso{
+Other numeric extractors: \code{\link{str_nth_number_after_mth}},
+  \code{\link{str_nth_number_before_mth}},
+  \code{\link{str_nth_number}}
+}
+\concept{numeric extractors}

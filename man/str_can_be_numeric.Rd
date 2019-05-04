@@ -10,8 +10,7 @@ str_can_be_numeric(string)
 \item{string}{A character vector.}
 }
 \value{
-A character vector. \code{TRUE} if the argument can be considered to be
-numeric or \code{FALSE} otherwise.
+A logical vector.
 }
 \description{
 After padding is removed, could the input string be considered to be numeric,
@@ -22,4 +21,6 @@ argument.
 str_can_be_numeric("3")
 str_can_be_numeric("5 ")
 str_can_be_numeric(c("1a", "abc"))
+
 }
+\concept{type converters}

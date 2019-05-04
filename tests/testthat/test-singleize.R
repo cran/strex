@@ -1,4 +1,3 @@
-context("Singleization")
 test_that("`str_singleize()` works", {
   expect_equal(str_singleize("abc//def", "/"), "abc/def")
   expect_equal(str_singleize("abababcabab", "ab"), "abcab")
@@ -7,4 +6,5 @@ test_that("`str_singleize()` works", {
     str_singleize(c("abab", "cdcd"), c("ab", "cd")),
     c("ab", "cd")
   )
+  expect_equal(str_singleize(character(), "abc"), character())
 })

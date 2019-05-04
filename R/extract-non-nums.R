@@ -1,11 +1,25 @@
+#' Extract non-numerics assuming no number ambiguity.
+#'
+#' Sometimes the strings have ambiguous numbers in them e.g. 2.5.3. These have
+#' to be dealt with by strex (which it does by returning `NA` in those cases).
+#' This helper to `str_extract_non_numerics()` assumes that the input has
+#' no such ambiguities.
+#'
+#' @param string A character vector.
+#' @param num_pattern The regex defining a numer in the current context.
+#'
+#' @return A list of character vectors.
+#'
+#' @noRd
+str_extract_non_numerics_no_ambigs <- function(string, num_pattern) {
+  stringi::stri_split_regex(string, num_pattern, omit_empty = TRUE)
+}
+
 #' Extract non-numbers from a string.
 #'
-#' `str_extract_non_numerics` extracts the bits of the string that aren't
-#' extracted by `extract_numbers`. `str_nth_non_numeric` is a convenient wrapper
-#' for `str_extract_non_numerics`, allowing you to choose which number you want.
-#' Please run the examples at the bottom of this page to ensure that you
-#' understand how these functions work, and their limitations. These functions
-#' are vectorized over `string`.
+#' Extract the non-numeric bits of a string where numbers are optionally defined
+#' with decimals, scientific notation and commas (as separators, not as an
+#' alternative to the decimal point).
 #'
 #' \itemize{ \item `str_first_non_numeric(...)` is just
 #' `str_nth_non_numeric(..., n = 1)`. \item `str_last_non_numeric(...)` is just
@@ -14,77 +28,187 @@
 #' @inheritParams str_extract_numbers
 #'
 #' @examples
-#' str_extract_non_numerics("abc123abc456")
-#' str_extract_non_numerics("abc1.23abc456")
-#' str_extract_non_numerics("abc1.23abc456", decimals = TRUE)
-#' str_extract_non_numerics("abc1..23abc456", decimals = TRUE)
-#' str_extract_non_numerics("abc1..23abc456", decimals = TRUE,
-#'                      leading_decimals = TRUE)
-#' str_extract_non_numerics(c("-123abc456", "ab1c"))
-#' str_extract_non_numerics("-123abc456", negs = TRUE)
-#' str_extract_non_numerics("--123abc456", negs = TRUE)
-#' str_extract_non_numerics("--123abc456", negs = TRUE)
-#' str_nth_non_numeric("--123abc456", 1)
-#' str_nth_non_numeric("--123abc456", -2)
+#' strings <- c(
+#'   "abc123def456", "abc-0.12def.345", "abc.12e4def34.5e9",
+#'   "abc1,100def1,230.5", "abc1,100e3,215def4e1,000"
+#' )
+#' str_extract_non_numerics(strings)
+#' str_extract_non_numerics(strings, decimals = TRUE, leading_decimals = FALSE)
+#' str_extract_non_numerics(strings, decimals = TRUE)
+#' str_extract_non_numerics(strings, commas = TRUE)
+#' str_extract_non_numerics(strings,
+#'   decimals = TRUE, leading_decimals = TRUE,
+#'   sci = TRUE
+#' )
+#' str_extract_non_numerics(strings,
+#'   decimals = TRUE, leading_decimals = TRUE,
+#'   sci = TRUE, commas = TRUE, negs = TRUE
+#' )
 #'
+#' @family non-numeric extractors
 #' @export
 str_extract_non_numerics <- function(string, decimals = FALSE,
-                                     leading_decimals = FALSE, negs = FALSE) {
-  if (leading_decimals == TRUE && decimals == FALSE) {
-    custom_stop(
-      "To allow leading decimals, you need to first allow decimals.",
-      "To allow decimals, use `decimals = TRUE`."
-    )
-  }
+                                     leading_decimals = decimals, negs = FALSE,
+                                     sci = FALSE, commas = FALSE) {
   checkmate::assert_character(string)
-  if (decimals) {
-    pattern <- "(?:[0-9]+(?:\\.?[0-9]+)*)+"
-    if (leading_decimals) pattern <- str_c("\\.?", pattern)
-  } else {
-    pattern <- "[0-9]+"
-  }
-  if (negs) pattern <- str_c("-?", pattern)
-  non_numerics <- str_split(string, pattern) %>% str_list_remove_empties()
-  numerics <- str_extract_numbers(string,
-    decimals = decimals,
-    leading_decimals = leading_decimals, negs = negs
+  checkmate::assert_flag(decimals)
+  checkmate::assert_flag(leading_decimals)
+  checkmate::assert_flag(negs)
+  checkmate::assert_flag(sci)
+  checkmate::assert_flag(commas)
+  if (all_equal(string, character())) return(list())
+  num_pattern <- num_regex(
+    decimals = decimals, leading_decimals = leading_decimals,
+    negs = negs, sci = sci, commas = commas
   )
-  na_pos <- purrr::map_lgl(numerics, anyNA)
-  non_numerics[na_pos] <- NA_character_
-  non_numerics
+  ambig_pattern <- ambig_num_regex(
+    decimals = decimals,
+    leading_decimals = leading_decimals,
+    sci = sci, commas = commas
+  )
+  ambigs <- num_ambigs(string,
+    decimals = decimals,
+    leading_decimals = leading_decimals, sci = sci,
+    commas = commas
+  )
+  out <- vector(mode = "list", length = length(string))
+  if (any(ambigs)) {
+    ambig_warn(string, ambigs, ambig_regex = ambig_pattern)
+    out[ambigs] <- NA_character_
+    not_ambigs <- !ambigs
+    out[not_ambigs] <- str_extract_non_numerics_no_ambigs(
+      string[not_ambigs],
+      num_pattern
+    )
+  } else {
+    out[] <- str_extract_non_numerics_no_ambigs(string, num_pattern)
+  }
+  out
 }
 
-#' @rdname str_extract_non_numerics
+#' Extract the `n`th non-numeric substring from a string.
+#'
+#' This is a helper for `str_nth_non_numeric()` which assums non-ambiguous
+#' input.
+#'
+#' For a detailed explanation of the number extraction, see
+#' [str_extract_numbers()].
+#'
+#' @inheritParams str_extract_numbers
+#' @inheritParams str_nth_number
+#'
+#' @return A character vector.
+#'
+#' @noRd
+str_nth_non_numeric_no_ambigs <- function(string, num_pattern, n) {
+  if (length(string) == 0) return(character())
+  if (length(n) == 1 && n >= 0) {
+    out <- stringi::stri_split_regex(string, num_pattern,
+      n = n + 1,
+      omit_empty = TRUE, simplify = TRUE
+    )[, n]
+    out %T>% {
+      .[!str_length(.)] <- NA_character_
+    }
+  } else {
+    stringi::stri_split_regex(string, num_pattern, omit_empty = TRUE) %>%
+      str_list_nth_elems(n)
+  }
+}
+
+#' Extract the `n`th non-numeric substring from a string.
+#'
+#' Extract the `n`th non-numeric bit of a string where numbers are optionally
+#' defined with decimals, scientific notation and commas (as separators, not as
+#' an alternative to the decimal point).
+#' \itemize{ \item `str_first_non_numeric(...)` is just
+#' `str_nth_non_numeric(..., n = 1)`. \item `str_last_non_numeric(...)` is
+#' just `str_nth_non_numeric(..., n = -1)`. }
+#'
+#' @inheritParams str_extract_non_numerics
+#' @inheritParams str_after_nth
+#'
+#'
+#'
+#' @examples
+#' strings <- c(
+#'   "abc123def456", "abc-0.12def.345", "abc.12e4def34.5e9",
+#'   "abc1,100def1,230.5", "abc1,100e3,215def4e1,000"
+#' )
+#' str_nth_non_numeric(strings, n = 2)
+#' str_nth_non_numeric(strings, n = -2, decimals = TRUE)
+#' str_first_non_numeric(strings, decimals = TRUE, leading_decimals = FALSE)
+#' str_last_non_numeric(strings, commas = TRUE)
+#' str_nth_non_numeric(strings,
+#'   n = 1, decimals = TRUE, leading_decimals = TRUE,
+#'   sci = TRUE
+#' )
+#' str_first_non_numeric(strings,
+#'   decimals = TRUE, leading_decimals = TRUE,
+#'   sci = TRUE, commas = TRUE, negs = TRUE
+#' )
+#'
+#' @family non-numeric extractors
 #' @export
 str_nth_non_numeric <- function(string, n, decimals = FALSE,
-                                leading_decimals = FALSE, negs = FALSE) {
-  checkmate::assert_numeric(n)
-  checkmate::assert_numeric(abs(n), lower = 1)
-  non_numerics <- str_extract_non_numerics(string,
-    decimals = decimals, negs = negs,
-    leading_decimals = leading_decimals
+                                leading_decimals = decimals, negs = FALSE,
+                                sci = FALSE, commas = FALSE) {
+  if (all_equal(string, character())) return(character())
+  verify_string_n(string, n)
+  checkmate::assert_flag(decimals)
+  checkmate::assert_flag(leading_decimals)
+  checkmate::assert_flag(negs)
+  checkmate::assert_flag(sci)
+  checkmate::assert_flag(commas)
+  num_pattern <- num_regex(
+    decimals = decimals, leading_decimals = leading_decimals,
+    negs = negs, sci = sci, commas = commas
   )
-  str_list_nth_elems(non_numerics, n)
+  ambig_pattern <- ambig_num_regex(
+    decimals = decimals,
+    leading_decimals = leading_decimals,
+    sci = sci, commas = commas
+  )
+  ambigs <- num_ambigs(string,
+    decimals = decimals,
+    leading_decimals = leading_decimals, sci = sci,
+    commas = commas
+  )
+  out <- character(length(string))
+  if (any(ambigs)) {
+    ambig_warn(string, ambigs, ambig_pattern)
+    out[ambigs] <- NA_character_
+    not_ambigs <- !ambigs
+    out[not_ambigs] <- str_nth_non_numeric_no_ambigs(
+      string[not_ambigs],
+      num_pattern, n
+    )
+  } else {
+    out[] <- str_nth_non_numeric_no_ambigs(string, num_pattern, n)
+  }
+  out
 }
 
-#' @rdname str_extract_non_numerics
+#' @rdname str_nth_non_numeric
 #' @export
 str_first_non_numeric <- function(string, decimals = FALSE,
-                                  leading_decimals = FALSE, negs = FALSE) {
+                                  leading_decimals = decimals, negs = FALSE,
+                                  sci = FALSE, commas = FALSE) {
   str_nth_non_numeric(string,
     n = 1,
     decimals = decimals, leading_decimals = leading_decimals,
-    negs = negs
+    negs = negs, sci = sci, commas = commas
   )
 }
 
-#' @rdname str_extract_non_numerics
+#' @rdname str_nth_non_numeric
 #' @export
 str_last_non_numeric <- function(string, decimals = FALSE,
-                                 leading_decimals = FALSE, negs = FALSE) {
+                                 leading_decimals = decimals, negs = FALSE,
+                                 sci = FALSE, commas = FALSE) {
   str_nth_non_numeric(string,
     n = -1,
     decimals = decimals, leading_decimals = leading_decimals,
-    negs = negs
+    negs = negs, sci = sci, commas = commas
   )
 }
