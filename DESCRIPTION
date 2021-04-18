@@ -1,6 +1,6 @@
 Package: strex
 Title: Extra String Manipulation Functions
-Version: 1.4.1
+Version: 1.4.2
 Authors@R: 
     person(given = "Rory",
            family = "Nolan",
@@ -27,11 +27,10 @@ VignetteBuilder: knitr
 Biarch: TRUE
 Encoding: UTF-8
 Language: en-US
-LazyData: true
 RoxygenNote: 7.1.1
 NeedsCompilation: yes
-Packaged: 2020-10-17 19:09:04 UTC; rnolan
+Packaged: 2021-04-18 03:57:31 UTC; rnolan
 Author: Rory Nolan [aut, cre] (<https://orcid.org/0000-0002-5239-4043>)
 Maintainer: Rory Nolan <rorynoolan@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-10-17 19:20:03 UTC
+Date/Publication: 2021-04-18 05:00:08 UTC
