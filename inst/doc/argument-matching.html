@@ -11,10 +11,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2021-04-18" />
+<meta name="date" content="2022-07-24" />
 
 <title>Argument Matching</title>
 
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -26,6 +39,7 @@
     </style>
 
 
+
 <style type="text/css">
   code {
     white-space: pre;
@@ -35,26 +49,28 @@
   }
 </style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -63,9 +79,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -316,7 +332,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Argument Matching</h1>
-<h4 class="date">2021-04-18</h4>
+<h4 class="date">2022-07-24</h4>
 
 
 
@@ -324,93 +340,111 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1>Ignoring case</h1>
 <div id="base" class="section level2">
 <h2><code>base</code></h2>
-<p>The base function <code>match.arg()</code> is good, but it doesn’t offer the possiblity to ignore case during argument matching. Sometimes it’s good to ignore case; for example, if you’re matching the arguments <code>c(&quot;yes&quot;, &quot;no&quot;)</code>, there’s no need to worry about case.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">base<span class="op">::</span><span class="kw">match.arg</span>(<span class="st">&quot;Y&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>, <span class="st">&quot;no&quot;</span>))</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co">#&gt; Error in base::match.arg(&quot;Y&quot;, c(&quot;yes&quot;, &quot;no&quot;)): 'arg' should be one of &quot;yes&quot;, &quot;no&quot;</span></a></code></pre></div>
+<p>The base function <code>match.arg()</code> is good, but it doesn’t
+offer the possiblity to ignore case during argument matching. Sometimes
+it’s good to ignore case; for example, if you’re matching the arguments
+<code>c(&quot;yes&quot;, &quot;no&quot;)</code>, there’s no need to worry about case.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>base<span class="sc">::</span><span class="fu">match.arg</span>(<span class="st">&quot;Y&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;yes&quot;</span>, <span class="st">&quot;no&quot;</span>))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in base::match.arg(&quot;Y&quot;, c(&quot;yes&quot;, &quot;no&quot;)): &#39;arg&#39; should be one of &quot;yes&quot;, &quot;no&quot;</span></span></code></pre></div>
 </div>
 <div id="strex" class="section level2">
 <h2><code>strex</code></h2>
-<p>The default behaviour of <code>strex::match_arg()</code> is to observe case, but case ignorance can be turned on with <code>ignore_case = TRUE</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">strex<span class="op">::</span><span class="kw">match_arg</span>(<span class="st">&quot;Y&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>, <span class="st">&quot;no&quot;</span>))</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt; Error: `Y` must be a prefix of exactly one element of `choices`.</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt;     * Your `choices` are &quot;yes&quot;, &quot;no&quot;.</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt;     * Your `Y` &quot;Y&quot; is not a prefix of any of your `choices`.</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">strex<span class="op">::</span><span class="kw">match_arg</span>(<span class="st">&quot;Y&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>, <span class="st">&quot;no&quot;</span>), <span class="dt">ignore_case =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt; [1] &quot;yes&quot;</span></a></code></pre></div>
+<p>The default behaviour of <code>strex::match_arg()</code> is to
+observe case, but case ignorance can be turned on with
+<code>ignore_case = TRUE</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>strex<span class="sc">::</span><span class="fu">match_arg</span>(<span class="st">&quot;Y&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;yes&quot;</span>, <span class="st">&quot;no&quot;</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `custom_stop()`:</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! `Y` must be a prefix of exactly one element of `choices`.</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * Your `choices` are &quot;yes&quot;, &quot;no&quot;.</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * Your `Y` &quot;Y&quot; is not a prefix of any of your `choices`.</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>strex<span class="sc">::</span><span class="fu">match_arg</span>(<span class="st">&quot;Y&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;yes&quot;</span>, <span class="st">&quot;no&quot;</span>), <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;yes&quot;</span></span></code></pre></div>
 </div>
 </div>
 <div id="error-messages" class="section level1">
 <h1>Error Messages</h1>
-<p>You can begin to see above that the error message from <code>strex::match_arg()</code> are more informative and nicely formatted. Here are a few more examples.</p>
+<p>You can begin to see above that the error message from
+<code>strex::match_arg()</code> are more informative and nicely
+formatted. Here are a few more examples.</p>
 <div id="no-matches" class="section level2">
 <h2>No matches</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">choices &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Apples&quot;</span>, <span class="st">&quot;Pears&quot;</span>, <span class="st">&quot;Bananas&quot;</span>, <span class="st">&quot;Oranges&quot;</span>, <span class="st">&quot;Avocados&quot;</span>, <span class="st">&quot;Apricots&quot;</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">match.arg</span>(<span class="st">&quot;Q&quot;</span>, choices)</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; Error in match.arg(&quot;Q&quot;, choices): 'arg' should be one of &quot;Apples&quot;, &quot;Pears&quot;, &quot;Bananas&quot;, &quot;Oranges&quot;, &quot;Avocados&quot;, &quot;Apricots&quot;</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">strex<span class="op">::</span><span class="kw">match_arg</span>(<span class="st">&quot;Q&quot;</span>, choices)</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; Error: `Q` must be a prefix of exactly one element of `choices`.</span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt;     * Your `choices` are &quot;Apples&quot;, &quot;Pears&quot;, &quot;Bananas&quot;, &quot;Oranges&quot;, &quot;Avocados&quot;, &quot;Apricots&quot;.</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt;     * Your `Q` &quot;Q&quot; is not a prefix of any of your `choices`.</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>choices <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Apples&quot;</span>, <span class="st">&quot;Pears&quot;</span>, <span class="st">&quot;Bananas&quot;</span>, <span class="st">&quot;Oranges&quot;</span>, <span class="st">&quot;Avocados&quot;</span>, <span class="st">&quot;Apricots&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">match.arg</span>(<span class="st">&quot;Q&quot;</span>, choices)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in match.arg(&quot;Q&quot;, choices): &#39;arg&#39; should be one of &quot;Apples&quot;, &quot;Pears&quot;, &quot;Bananas&quot;, &quot;Oranges&quot;, &quot;Avocados&quot;, &quot;Apricots&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>strex<span class="sc">::</span><span class="fu">match_arg</span>(<span class="st">&quot;Q&quot;</span>, choices)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `custom_stop()`:</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! `Q` must be a prefix of exactly one element of `choices`.</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * Your `choices` are &quot;Apples&quot;, &quot;Pears&quot;, &quot;Bananas&quot;, &quot;Oranges&quot;, &quot;Avocados&quot;, &quot;Apricots&quot;.</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * Your `Q` &quot;Q&quot; is not a prefix of any of your `choices`.</span></span></code></pre></div>
 </div>
 <div id="multiple-matches" class="section level2">
 <h2>Multiple matches</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">match.arg</span>(<span class="st">&quot;A&quot;</span>, choices)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; Error in match.arg(&quot;A&quot;, choices): 'arg' should be one of &quot;Apples&quot;, &quot;Pears&quot;, &quot;Bananas&quot;, &quot;Oranges&quot;, &quot;Avocados&quot;, &quot;Apricots&quot;</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">strex<span class="op">::</span><span class="kw">match_arg</span>(<span class="st">&quot;A&quot;</span>, choices)</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; Error: `A` must be a prefix of exactly one element of `choices`.</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt;     * Your `A` &quot;A&quot; is a prefix of two or more elements of `choices`.</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt;     * The first two of these are &quot;Apples&quot; and &quot;Avocados&quot;.</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">match.arg</span>(<span class="st">&quot;A&quot;</span>, choices)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in match.arg(&quot;A&quot;, choices): &#39;arg&#39; should be one of &quot;Apples&quot;, &quot;Pears&quot;, &quot;Bananas&quot;, &quot;Oranges&quot;, &quot;Avocados&quot;, &quot;Apricots&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>strex<span class="sc">::</span><span class="fu">match_arg</span>(<span class="st">&quot;A&quot;</span>, choices)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `custom_stop()`:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! `A` must be a prefix of exactly one element of `choices`.</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * Your `A` &quot;A&quot; is a prefix of two or more elements of `choices`.</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * The first two of these are &quot;Apples&quot; and &quot;Avocados&quot;.</span></span></code></pre></div>
 </div>
 <div id="wrong-arg-length" class="section level2">
 <h2>Wrong <code>arg</code> length</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">match.arg</span>(<span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;a&quot;</span>), choices)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; Error in match.arg(c(&quot;A&quot;, &quot;a&quot;), choices): 'arg' must be of length 1</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">strex<span class="op">::</span><span class="kw">match_arg</span>(<span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;a&quot;</span>), choices)</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; Error: `arg` must have length 1.</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt;     * Your `arg` has length 2.</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt;     * To use an `arg` with length greater than one, use `several_ok = TRUE`.</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">match.arg</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;a&quot;</span>), choices)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in match.arg(c(&quot;A&quot;, &quot;a&quot;), choices): &#39;arg&#39; must be of length 1</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>strex<span class="sc">::</span><span class="fu">match_arg</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;a&quot;</span>), choices)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `custom_stop()`:</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! `arg` must have length 1.</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * Your `arg` has length 2.</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * To use an `arg` with length greater than one, use `several_ok = TRUE`.</span></span></code></pre></div>
 </div>
 <div id="duplicate-elements-in-choices" class="section level2">
 <h2>Duplicate elements in <code>choices</code></h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">choices &lt;-<span class="st"> </span><span class="kw">c</span>(choices, <span class="st">&quot;Pears&quot;</span>)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">match.arg</span>(<span class="st">&quot;P&quot;</span>, choices)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; Error in match.arg(&quot;P&quot;, choices): 'arg' should be one of &quot;Apples&quot;, &quot;Pears&quot;, &quot;Bananas&quot;, &quot;Oranges&quot;, &quot;Avocados&quot;, &quot;Apricots&quot;, &quot;Pears&quot;</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">strex<span class="op">::</span><span class="kw">match_arg</span>(<span class="st">&quot;P&quot;</span>, choices)</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; Error: `choices` must not have duplicate elements.</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt;     * Element 7, of your `choices` (&quot;Pears&quot;) is a duplicate.</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>choices <span class="ot">&lt;-</span> <span class="fu">c</span>(choices, <span class="st">&quot;Pears&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">match.arg</span>(<span class="st">&quot;P&quot;</span>, choices)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in match.arg(&quot;P&quot;, choices): &#39;arg&#39; should be one of &quot;Apples&quot;, &quot;Pears&quot;, &quot;Bananas&quot;, &quot;Oranges&quot;, &quot;Avocados&quot;, &quot;Apricots&quot;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>strex<span class="sc">::</span><span class="fu">match_arg</span>(<span class="st">&quot;P&quot;</span>, choices)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `custom_stop()`:</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! `choices` must not have duplicate elements.</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * Element 7, of your `choices` (&quot;Pears&quot;) is a duplicate.</span></span></code></pre></div>
 </div>
 <div id="not-specifying-choices" class="section level2">
 <h2>Not specifying <code>choices</code></h2>
-<p>It’s OK not to specify choices in one circumstance: when <code>arg</code> is passed as a default argument of another function.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">myword &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">w =</span> <span class="kw">c</span>(<span class="st">&quot;abacus&quot;</span>, <span class="st">&quot;baseball&quot;</span>, <span class="st">&quot;candy&quot;</span>)) {</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">  w &lt;-<span class="st"> </span>strex<span class="op">::</span><span class="kw">match_arg</span>(w)</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">  w</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">}</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="kw">myword</span>()</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; [1] &quot;abacus&quot;</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="kw">myword</span>(<span class="st">&quot;b&quot;</span>)</a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; [1] &quot;baseball&quot;</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="kw">myword</span>(<span class="st">&quot;c&quot;</span>)</a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; [1] &quot;candy&quot;</span></a></code></pre></div>
-<p>This is very strict though, only the <em>symbol</em> for the default argument can be passed, not any variant of it, not even something which evaluates to the same thing.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">myword &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">w =</span> <span class="kw">c</span>(<span class="st">&quot;abacus&quot;</span>, <span class="st">&quot;baseball&quot;</span>, <span class="st">&quot;candy&quot;</span>)) {</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">  w &lt;-<span class="st"> </span>strex<span class="op">::</span><span class="kw">match_arg</span>(<span class="kw">identity</span>(w))</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">  w</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">}</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="kw">myword</span>(<span class="st">&quot;b&quot;</span>)</a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; Error: You have used `strex::match_arg()` without specifying a `choices` argument.</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt;     * The only way to do this is from another function where `arg` has a default setting. This is the same as `base::match.arg()`.</span></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt;     * See the man page for `strex::match_arg()`, particularly the examples: enter `help(&quot;strex::match_arg&quot;, package = &quot;strex&quot;)` at the R console.</span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt;     * See also the vignette on argument matching: enter `vignette(&quot;argument-matching&quot;, package = &quot;strex&quot;)` at the R console.</span></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10">myword &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">w =</span> <span class="kw">c</span>(<span class="st">&quot;abacus&quot;</span>, <span class="st">&quot;baseball&quot;</span>, <span class="st">&quot;candy&quot;</span>)) {</a>
-<a class="sourceLine" id="cb8-11" data-line-number="11">  w &lt;-<span class="st"> </span>strex<span class="op">::</span><span class="kw">match_arg</span>(<span class="kw">as.character</span>(w))</a>
-<a class="sourceLine" id="cb8-12" data-line-number="12">  w</a>
-<a class="sourceLine" id="cb8-13" data-line-number="13">}</a>
-<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="kw">myword</span>(<span class="st">&quot;b&quot;</span>)</a>
-<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt; Error: You have used `strex::match_arg()` without specifying a `choices` argument.</span></a>
-<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co">#&gt;     * The only way to do this is from another function where `arg` has a default setting. This is the same as `base::match.arg()`.</span></a>
-<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="co">#&gt;     * See the man page for `strex::match_arg()`, particularly the examples: enter `help(&quot;strex::match_arg&quot;, package = &quot;strex&quot;)` at the R console.</span></a>
-<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="co">#&gt;     * See also the vignette on argument matching: enter `vignette(&quot;argument-matching&quot;, package = &quot;strex&quot;)` at the R console.</span></a></code></pre></div>
+<p>It’s OK not to specify choices in one circumstance: when
+<code>arg</code> is passed as a default argument of another
+function.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>myword <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">w =</span> <span class="fu">c</span>(<span class="st">&quot;abacus&quot;</span>, <span class="st">&quot;baseball&quot;</span>, <span class="st">&quot;candy&quot;</span>)) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">&lt;-</span> strex<span class="sc">::</span><span class="fu">match_arg</span>(w)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  w</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">myword</span>()</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;abacus&quot;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">myword</span>(<span class="st">&quot;b&quot;</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;baseball&quot;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">myword</span>(<span class="st">&quot;c&quot;</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;candy&quot;</span></span></code></pre></div>
+<p>This is very strict though, only the <em>symbol</em> for the default
+argument can be passed, not any variant of it, not even something which
+evaluates to the same thing.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>myword <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">w =</span> <span class="fu">c</span>(<span class="st">&quot;abacus&quot;</span>, <span class="st">&quot;baseball&quot;</span>, <span class="st">&quot;candy&quot;</span>)) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">&lt;-</span> strex<span class="sc">::</span><span class="fu">match_arg</span>(<span class="fu">identity</span>(w))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  w</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">myword</span>(<span class="st">&quot;b&quot;</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `custom_stop()`:</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! You have used `strex::match_arg()` without specifying a `choices` argument.</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * The only way to do this is from another function where `arg` has a default setting. This is the same as `base::match.arg()`.</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * See the man page for `strex::match_arg()`, particularly the examples: enter `help(&quot;strex::match_arg&quot;, package = &quot;strex&quot;)` at the R console.</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * See also the vignette on argument matching: enter `vignette(&quot;argument-matching&quot;, package = &quot;strex&quot;)` at the R console.</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>myword <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">w =</span> <span class="fu">c</span>(<span class="st">&quot;abacus&quot;</span>, <span class="st">&quot;baseball&quot;</span>, <span class="st">&quot;candy&quot;</span>)) {</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">&lt;-</span> strex<span class="sc">::</span><span class="fu">match_arg</span>(<span class="fu">as.character</span>(w))</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  w</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="fu">myword</span>(<span class="st">&quot;b&quot;</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `custom_stop()`:</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! You have used `strex::match_arg()` without specifying a `choices` argument.</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * The only way to do this is from another function where `arg` has a default setting. This is the same as `base::match.arg()`.</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * See the man page for `strex::match_arg()`, particularly the examples: enter `help(&quot;strex::match_arg&quot;, package = &quot;strex&quot;)` at the R console.</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * See also the vignette on argument matching: enter `vignette(&quot;argument-matching&quot;, package = &quot;strex&quot;)` at the R console.</span></span></code></pre></div>
 </div>
 </div>
 
