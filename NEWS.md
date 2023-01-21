@@ -1,4 +1,11 @@
-#' `strex` 1.5.1
+# `strex` 1.6.0
+
+## MINOR IMPROVEMENTS
+* Remove usage of `magrittr`'s `%<>%` operator.
+* Now using the new `rlang::abort()` error message formatting.
+
+
+# `strex` 1.5.1
 
 ## BUG FIXES
 * `purrr` should not have been in `Imports`. It is now in `Suggests`.

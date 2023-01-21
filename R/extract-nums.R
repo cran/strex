@@ -23,9 +23,9 @@
 num_regex <- function(decimals = FALSE, leading_decimals = decimals,
                       negs = FALSE, sci = FALSE, commas = FALSE) {
   if (leading_decimals == TRUE && decimals == FALSE) {
-    custom_stop(
-      "To allow leading decimals, you need to first allow decimals.",
-      "To allow decimals, use `decimals = TRUE`."
+    rlang::abort(
+      c("To allow leading decimals, you need to first allow decimals.",
+        i = "To allow decimals, use `decimals = TRUE`.")
     )
   }
   dec_pattern <- ifelse(commas, "\\d+(?:,?\\d+)*(?:\\.\\d+)?",
@@ -101,19 +101,19 @@ num_ambigs <- function(string, decimals = FALSE, leading_decimals = decimals,
 ambig_warn <- function(string, ambigs, ambig_regex) {
   first_offender <- match(T, ambigs) %>%
     list(., string[.])
-  first_offender[[2]] %<>% {
-    ifelse(str_length(.) > 50, str_c(str_sub(., 1, 17), "..."), .)
-  }
-  custom_warn(
-    "NAs introduced by ambiguity.",
-    "
-    The first such ambiguity is in string number
-    {first_offender[[1]]} which is '{first_offender[[2]]}'.
-    ",
-    "
-    The offending part of that string is
-    '{str_extract(first_offender[[2]], ambig_regex)}'.
-    "
+  first_offender[[2]] <- ifelse(
+    str_length(first_offender[[2]]) > 50,
+    str_c(str_sub(first_offender[[2]], 1, 17), "..."),
+    first_offender[[2]]
+  )
+  rlang::warn(
+    c(
+      "`NA`s introduced by ambiguity.",
+      i = str_glue("The first such ambiguity is in string number ",
+                   "{first_offender[[1]]} which is '{first_offender[[2]]}'."),
+      x = str_glue("The offending part of that string is ",
+                   "'{str_extract(first_offender[[2]], ambig_regex)}'.")
+    )
   )
 }
 
@@ -323,7 +323,7 @@ str_nth_number <- function(string, n, decimals = FALSE,
   if (leave_as_string) {
     return(out)
   }
-  if (commas) out %<>% str_replace_all(",", "")
+  if (commas) out <- str_replace_all(out, ",", "")
   as.numeric(out)
 }
 

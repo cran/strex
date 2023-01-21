@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2023-01-14" />
+<meta name="date" content="2023-01-21" />
 
 <title>Argument Matching</title>
 
@@ -338,7 +338,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Argument Matching</h1>
-<h4 class="date">2023-01-14</h4>
+<h4 class="date">2023-01-21</h4>
 
 
 
@@ -359,10 +359,10 @@ it’s good to ignore case; for example, if you’re matching the arguments
 observe case, but case ignorance can be turned on with
 <code>ignore_case = TRUE</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>strex<span class="sc">::</span><span class="fu">match_arg</span>(<span class="st">&quot;Y&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;yes&quot;</span>, <span class="st">&quot;no&quot;</span>))</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `custom_stop()`:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `str_match_arg_basic()`:</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! `Y` must be a prefix of exactly one element of `choices`.</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * Your `choices` are &quot;yes&quot;, &quot;no&quot;.</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * Your `Y` &quot;Y&quot; is not a prefix of any of your `choices`.</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Your `choices` are yes, no.</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✖ Your `Y`, &#39;Y&#39;, is not a prefix of any of your `choices`.</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>strex<span class="sc">::</span><span class="fu">match_arg</span>(<span class="st">&quot;Y&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;yes&quot;</span>, <span class="st">&quot;no&quot;</span>), <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;yes&quot;</span></span></code></pre></div>
 </div>
@@ -378,30 +378,30 @@ formatted. Here are a few more examples.</p>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">match.arg</span>(<span class="st">&quot;Q&quot;</span>, choices)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in match.arg(&quot;Q&quot;, choices): &#39;arg&#39; should be one of &quot;Apples&quot;, &quot;Pears&quot;, &quot;Bananas&quot;, &quot;Oranges&quot;, &quot;Avocados&quot;, &quot;Apricots&quot;</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>strex<span class="sc">::</span><span class="fu">match_arg</span>(<span class="st">&quot;Q&quot;</span>, choices)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `custom_stop()`:</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `str_match_arg_basic()`:</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! `Q` must be a prefix of exactly one element of `choices`.</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * Your `choices` are &quot;Apples&quot;, &quot;Pears&quot;, &quot;Bananas&quot;, &quot;Oranges&quot;, &quot;Avocados&quot;, &quot;Apricots&quot;.</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * Your `Q` &quot;Q&quot; is not a prefix of any of your `choices`.</span></span></code></pre></div>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Your `choices` are Apples, Pears, Bananas, Oranges, Avocados, Apricots.</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✖ Your `Q`, &#39;Q&#39;, is not a prefix of any of your `choices`.</span></span></code></pre></div>
 </div>
 <div id="multiple-matches" class="section level2">
 <h2>Multiple matches</h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">match.arg</span>(<span class="st">&quot;A&quot;</span>, choices)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in match.arg(&quot;A&quot;, choices): &#39;arg&#39; should be one of &quot;Apples&quot;, &quot;Pears&quot;, &quot;Bananas&quot;, &quot;Oranges&quot;, &quot;Avocados&quot;, &quot;Apricots&quot;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>strex<span class="sc">::</span><span class="fu">match_arg</span>(<span class="st">&quot;A&quot;</span>, choices)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `custom_stop()`:</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! `A` must be a prefix of exactly one element of `choices`.</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * Your `A` &quot;A&quot; is a prefix of two or more elements of `choices`.</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * The first two of these are &quot;Apples&quot; and &quot;Avocados&quot;.</span></span></code></pre></div>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `str_match_arg_basic()`:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! `arg` must be a prefix of exactly one element of `choices`.</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✖ Your `arg`, &#39;A&#39;, is a prefix of two or more elements of `choices`.</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ The first two of these are &#39;Apples&#39; and &#39;Avocados&#39;.</span></span></code></pre></div>
 </div>
 <div id="wrong-arg-length" class="section level2">
 <h2>Wrong <code>arg</code> length</h2>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">match.arg</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;a&quot;</span>), choices)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in match.arg(c(&quot;A&quot;, &quot;a&quot;), choices): &#39;arg&#39; must be of length 1</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>strex<span class="sc">::</span><span class="fu">match_arg</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;a&quot;</span>), choices)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `custom_stop()`:</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `str_match_arg_basic()`:</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! `arg` must have length 1.</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * Your `arg` has length 2.</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * To use an `arg` with length greater than one, use `several_ok = TRUE`.</span></span></code></pre></div>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✖ Your `arg` has length 2.</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ To use an `arg` with length greater than one, use `several_ok = TRUE`.</span></span></code></pre></div>
 </div>
 <div id="duplicate-elements-in-choices" class="section level2">
 <h2>Duplicate elements in <code>choices</code></h2>
@@ -409,9 +409,9 @@ formatted. Here are a few more examples.</p>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">match.arg</span>(<span class="st">&quot;P&quot;</span>, choices)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in match.arg(&quot;P&quot;, choices): &#39;arg&#39; should be one of &quot;Apples&quot;, &quot;Pears&quot;, &quot;Bananas&quot;, &quot;Oranges&quot;, &quot;Avocados&quot;, &quot;Apricots&quot;</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>strex<span class="sc">::</span><span class="fu">match_arg</span>(<span class="st">&quot;P&quot;</span>, choices)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `custom_stop()`:</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `str_match_arg_basic()`:</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! `choices` must not have duplicate elements.</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * Element 7, of your `choices` (&quot;Pears&quot;) is a duplicate.</span></span></code></pre></div>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • Element 7 of your `choices`, &#39;Pears&#39;, is a duplicate.</span></span></code></pre></div>
 </div>
 <div id="not-specifying-choices" class="section level2">
 <h2>Not specifying <code>choices</code></h2>
@@ -436,21 +436,21 @@ evaluates to the same thing.</p>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  w</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">myword</span>(<span class="st">&quot;b&quot;</span>)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `custom_stop()`:</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! You have used `strex::match_arg()` without specifying a `choices` argument.</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * The only way to do this is from another function where `arg` has a default setting. This is the same as `base::match.arg()`.</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * See the man page for `strex::match_arg()`, particularly the examples: enter `help(&quot;strex::match_arg&quot;, package = &quot;strex&quot;)` at the R console.</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * See also the vignette on argument matching: enter `vignette(&quot;argument-matching&quot;, package = &quot;strex&quot;)` at the R console.</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `strex::match_arg()`:</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! You used `match_arg()` without specifying a `choices` argument.</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ The only way to do this is from another function where the `arg` has a default setting. This is the same as `base::match.arg()`.</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ See the man page for `match_arg()`.</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ See the vignette on argument matching: enter `vignette(&#39;argument-matching&#39;, package = &#39;strex&#39;)` at the R console.</span></span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>myword <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">w =</span> <span class="fu">c</span>(<span class="st">&quot;abacus&quot;</span>, <span class="st">&quot;baseball&quot;</span>, <span class="st">&quot;candy&quot;</span>)) {</span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">&lt;-</span> strex<span class="sc">::</span><span class="fu">match_arg</span>(<span class="fu">as.character</span>(w))</span>
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  w</span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="fu">myword</span>(<span class="st">&quot;b&quot;</span>)</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `custom_stop()`:</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! You have used `strex::match_arg()` without specifying a `choices` argument.</span></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * The only way to do this is from another function where `arg` has a default setting. This is the same as `base::match.arg()`.</span></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * See the man page for `strex::match_arg()`, particularly the examples: enter `help(&quot;strex::match_arg&quot;, package = &quot;strex&quot;)` at the R console.</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     * See also the vignette on argument matching: enter `vignette(&quot;argument-matching&quot;, package = &quot;strex&quot;)` at the R console.</span></span></code></pre></div>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `strex::match_arg()`:</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! You used `match_arg()` without specifying a `choices` argument.</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ The only way to do this is from another function where the `arg` has a default setting. This is the same as `base::match.arg()`.</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ See the man page for `match_arg()`.</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ See the vignette on argument matching: enter `vignette(&#39;argument-matching&#39;, package = &#39;strex&#39;)` at the R console.</span></span></code></pre></div>
 </div>
 </div>
 

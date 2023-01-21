@@ -1,8 +1,9 @@
 #' @useDynLib strex, .registration = TRUE
 #' @import stringr
 #' @importFrom stringi stri_write_lines
-#' @importFrom magrittr '%>%' '%<>%' '%T>%'
+#' @importFrom magrittr '%>%'
 #' @importFrom stats as.dendrogram
+#' @importFrom utils head
 NULL
 
 

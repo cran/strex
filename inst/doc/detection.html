@@ -400,8 +400,8 @@ but FWIW, it’s faster to convert to regex using
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2 × 6</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   expression                                                  min median itr/s…¹</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;bch:expr&gt;                                                &lt;bch&gt; &lt;bch:&gt;   &lt;dbl&gt;</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 str_detect_all(rep(&quot;*&quot;, 1000), rep(str_escape(&quot;*&quot;), 555)) 248ms  254ms    3.93</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 str_detect_all(rep(&quot;*&quot;, 1000), coll(rep(&quot;*&quot;, 555)))       392ms  404ms    2.43</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 str_detect_all(rep(&quot;*&quot;, 1000), rep(str_escape(&quot;*&quot;), 555)) 256ms  262ms    3.76</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 str_detect_all(rep(&quot;*&quot;, 1000), coll(rep(&quot;*&quot;, 555)))       403ms  437ms    1.53</span></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 2 more variables: mem_alloc &lt;bch:byt&gt;, `gc/sec` &lt;dbl&gt;, and abbreviated</span></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   variable name ¹​`itr/sec`</span></span></code></pre></div>
 </div>
