@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2023-01-21" />
+<meta name="date" content="2023-10-30" />
 
 <title>Before and After</title>
 
@@ -338,64 +338,64 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Before and After</h1>
-<h4 class="date">2023-01-21</h4>
+<h4 class="date">2023-10-30</h4>
 
 
 
 <p>Often, we want the part of a string that comes before or after a
 given pattern.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(strex)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Loading required package: stringr</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(strex)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co">#&gt; Loading required package: stringr</span></span></code></pre></div>
 <div id="before" class="section level2">
 <h2>Before</h2>
 <p><code>str_before_nth()</code> gives you the part of a string before
 the <code>n</code><sup>th</sup> appearance of a pattern. It has the
 friends <code>str_before_first()</code> and
 <code>str_before_last()</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">&quot;ab..cd..de..fg..h&quot;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_before_first</span>(string, <span class="st">&quot;e&quot;</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;ab..cd..d&quot;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str_before_nth</span>(string, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">.&quot;</span>, <span class="dv">3</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;ab..cd&quot;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">str_before_last</span>(string, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">.&quot;</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;ab..cd..de..fg.&quot;</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">str_before_nth</span>(string, <span class="st">&quot;.&quot;</span>, <span class="sc">-</span><span class="dv">3</span>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;ab..cd..de..fg&quot;</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">str_before_nth</span>(<span class="fu">rep</span>(string, <span class="dv">2</span>), <span class="fu">fixed</span>(<span class="st">&quot;.&quot;</span>), <span class="sc">-</span><span class="dv">3</span>)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;ab..cd..de.&quot; &quot;ab..cd..de.&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">&quot;ab..cd..de..fg..h&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">str_before_first</span>(string, <span class="st">&quot;e&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;ab..cd..d&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">str_before_nth</span>(string, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">.&quot;</span>, <span class="dv">3</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; [1] &quot;ab..cd&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">str_before_last</span>(string, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">.&quot;</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;ab..cd..de..fg.&quot;</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="fu">str_before_nth</span>(string, <span class="st">&quot;.&quot;</span>, <span class="sc">-</span><span class="dv">3</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; [1] &quot;ab..cd..de..fg&quot;</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="fu">str_before_nth</span>(<span class="fu">rep</span>(string, <span class="dv">2</span>), <span class="fu">fixed</span>(<span class="st">&quot;.&quot;</span>), <span class="sc">-</span><span class="dv">3</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; [1] &quot;ab..cd..de.&quot; &quot;ab..cd..de.&quot;</span></span></code></pre></div>
 </div>
 <div id="after" class="section level2">
 <h2>After</h2>
 <p><code>str_after_nth()</code> gives you the part of a string after the
 <code>n</code><sup>th</sup> appearance of a pattern. It has the friends
 <code>str_after_first()</code> and <code>str_after_last()</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">&quot;ab..cd..de..fg..h&quot;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_after_first</span>(string, <span class="st">&quot;e&quot;</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;..fg..h&quot;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str_after_nth</span>(string, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">.&quot;</span>, <span class="dv">3</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;.de..fg..h&quot;</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">str_after_last</span>(string, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">.&quot;</span>)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;h&quot;</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">str_after_nth</span>(string, <span class="st">&quot;.&quot;</span>, <span class="sc">-</span><span class="dv">3</span>)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;.h&quot;</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">str_after_nth</span>(<span class="fu">rep</span>(string, <span class="dv">2</span>), <span class="fu">fixed</span>(<span class="st">&quot;.&quot;</span>), <span class="sc">-</span><span class="dv">3</span>)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;fg..h&quot; &quot;fg..h&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">&quot;ab..cd..de..fg..h&quot;</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">str_after_first</span>(string, <span class="st">&quot;e&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;..fg..h&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">str_after_nth</span>(string, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">.&quot;</span>, <span class="dv">3</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; [1] &quot;.de..fg..h&quot;</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="fu">str_after_last</span>(string, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">.&quot;</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;h&quot;</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="fu">str_after_nth</span>(string, <span class="st">&quot;.&quot;</span>, <span class="sc">-</span><span class="dv">3</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; [1] &quot;.h&quot;</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="fu">str_after_nth</span>(<span class="fu">rep</span>(string, <span class="dv">2</span>), <span class="fu">fixed</span>(<span class="st">&quot;.&quot;</span>), <span class="sc">-</span><span class="dv">3</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; [1] &quot;fg..h&quot; &quot;fg..h&quot;</span></span></code></pre></div>
 </div>
 <div id="a-more-concrete-example" class="section level2">
 <h2>A more concrete example</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">&quot;James did the cooking, Harry did the cleaning.&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">&quot;James did the cooking, Harry did the cleaning.&quot;</span></span></code></pre></div>
 <p>Let’s write a function to figure out which task each of the lads
 did.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>get_task <span class="ot">&lt;-</span> <span class="cf">function</span>(string, name) {</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_c</span>(name, <span class="st">&quot; did the &quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_after_first</span>(string, .) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_before_first</span>(<span class="st">&quot;[</span><span class="sc">\\</span><span class="st">.,]&quot;</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">get_task</span>(string, <span class="st">&quot;James&quot;</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;cooking&quot;</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">get_task</span>(string, <span class="st">&quot;Harry&quot;</span>)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;cleaning&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>get_task <span class="ot">&lt;-</span> <span class="cf">function</span>(string, name) {</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="fu">str_c</span>(name, <span class="st">&quot; did the &quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="fu">str_after_first</span>(string, .) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="fu">str_before_first</span>(<span class="st">&quot;[</span><span class="sc">\\</span><span class="st">.,]&quot;</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>}</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="fu">get_task</span>(string, <span class="st">&quot;James&quot;</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; [1] &quot;cooking&quot;</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="fu">get_task</span>(string, <span class="st">&quot;Harry&quot;</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; [1] &quot;cleaning&quot;</span></span></code></pre></div>
 <p><code>get_task()</code> would have been more difficult to write
 without <code>str_after_first()</code> and
 <code>str_before_first()</code>.</p>

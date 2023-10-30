@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2023-01-21" />
+<meta name="date" content="2023-10-30" />
 
 <title>Alphordering Numbers</title>
 
@@ -338,7 +338,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Alphordering Numbers</h1>
-<h4 class="date">2023-01-21</h4>
+<h4 class="date">2023-10-30</h4>
 
 
 
@@ -346,22 +346,22 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h2>Numbers don’t comply with alphabetical order</h2>
 <p><code>poorly_ordered</code> is a vector of file names of images of
 patient samples from different days.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>poorly_ordered</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;patient101-day9.png&quot;  &quot;patient98-day10.png&quot;  &quot;patient98-day9.png&quot;  </span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;patient99-day9.png&quot;   &quot;patient98-day11.png&quot;  &quot;patient102-day11.png&quot;</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;patient102-day10.png&quot; &quot;patient100-day11.png&quot; &quot;patient100-day9.png&quot; </span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [10] &quot;patient101-day11.png&quot; &quot;patient102-day9.png&quot;  &quot;patient99-day10.png&quot; </span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [13] &quot;patient103-day10.png&quot; &quot;patient103-day9.png&quot;  &quot;patient101-day10.png&quot;</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [16] &quot;patient100-day10.png&quot; &quot;patient103-day11.png&quot; &quot;patient99-day11.png&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>poorly_ordered</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;patient101-day9.png&quot;  &quot;patient98-day10.png&quot;  &quot;patient98-day9.png&quot;  </span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;patient99-day9.png&quot;   &quot;patient98-day11.png&quot;  &quot;patient102-day11.png&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;patient102-day10.png&quot; &quot;patient100-day11.png&quot; &quot;patient100-day9.png&quot; </span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&gt; [10] &quot;patient101-day11.png&quot; &quot;patient102-day9.png&quot;  &quot;patient99-day10.png&quot; </span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#&gt; [13] &quot;patient103-day10.png&quot; &quot;patient103-day9.png&quot;  &quot;patient101-day10.png&quot;</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co">#&gt; [16] &quot;patient100-day10.png&quot; &quot;patient103-day11.png&quot; &quot;patient99-day11.png&quot;</span></span></code></pre></div>
 <p>How do we get this vector into order? Well, alphabetical order
 doesn’t work:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(poorly_ordered)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;patient100-day10.png&quot; &quot;patient100-day11.png&quot; &quot;patient100-day9.png&quot; </span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;patient101-day10.png&quot; &quot;patient101-day11.png&quot; &quot;patient101-day9.png&quot; </span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;patient102-day10.png&quot; &quot;patient102-day11.png&quot; &quot;patient102-day9.png&quot; </span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [10] &quot;patient103-day10.png&quot; &quot;patient103-day11.png&quot; &quot;patient103-day9.png&quot; </span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [13] &quot;patient98-day10.png&quot;  &quot;patient98-day11.png&quot;  &quot;patient98-day9.png&quot;  </span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [16] &quot;patient99-day10.png&quot;  &quot;patient99-day11.png&quot;  &quot;patient99-day9.png&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">sort</span>(poorly_ordered)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;patient100-day10.png&quot; &quot;patient100-day11.png&quot; &quot;patient100-day9.png&quot; </span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;patient101-day10.png&quot; &quot;patient101-day11.png&quot; &quot;patient101-day9.png&quot; </span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;patient102-day10.png&quot; &quot;patient102-day11.png&quot; &quot;patient102-day9.png&quot; </span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; [10] &quot;patient103-day10.png&quot; &quot;patient103-day11.png&quot; &quot;patient103-day9.png&quot; </span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; [13] &quot;patient98-day10.png&quot;  &quot;patient98-day11.png&quot;  &quot;patient98-day9.png&quot;  </span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; [16] &quot;patient99-day10.png&quot;  &quot;patient99-day11.png&quot;  &quot;patient99-day9.png&quot;</span></span></code></pre></div>
 <p>Patient 100 comes before patient 99. This is because 1 comes before 9
 in alphabetical order.</p>
 </div>
@@ -369,21 +369,21 @@ in alphabetical order.</p>
 <h2>Alphordering numbers</h2>
 <p>It’s possible to <em>alphord</em> the numbers by prefixing them with
 zeroes:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>strex<span class="sc">::</span><span class="fu">str_alphord_nums</span>(poorly_ordered)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;patient101-day09.png&quot; &quot;patient098-day10.png&quot; &quot;patient098-day09.png&quot;</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;patient099-day09.png&quot; &quot;patient098-day11.png&quot; &quot;patient102-day11.png&quot;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;patient102-day10.png&quot; &quot;patient100-day11.png&quot; &quot;patient100-day09.png&quot;</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [10] &quot;patient101-day11.png&quot; &quot;patient102-day09.png&quot; &quot;patient099-day10.png&quot;</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [13] &quot;patient103-day10.png&quot; &quot;patient103-day09.png&quot; &quot;patient101-day10.png&quot;</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [16] &quot;patient100-day10.png&quot; &quot;patient103-day11.png&quot; &quot;patient099-day11.png&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>strex<span class="sc">::</span><span class="fu">str_alphord_nums</span>(poorly_ordered)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;patient101-day09.png&quot; &quot;patient098-day10.png&quot; &quot;patient098-day09.png&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;patient099-day09.png&quot; &quot;patient098-day11.png&quot; &quot;patient102-day11.png&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;patient102-day10.png&quot; &quot;patient100-day11.png&quot; &quot;patient100-day09.png&quot;</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; [10] &quot;patient101-day11.png&quot; &quot;patient102-day09.png&quot; &quot;patient099-day10.png&quot;</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; [13] &quot;patient103-day10.png&quot; &quot;patient103-day09.png&quot; &quot;patient101-day10.png&quot;</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; [16] &quot;patient100-day10.png&quot; &quot;patient103-day11.png&quot; &quot;patient099-day11.png&quot;</span></span></code></pre></div>
 <p>Having done this, the alphabetical order is the one we want:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(strex<span class="sc">::</span><span class="fu">str_alphord_nums</span>(poorly_ordered))</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;patient098-day09.png&quot; &quot;patient098-day10.png&quot; &quot;patient098-day11.png&quot;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;patient099-day09.png&quot; &quot;patient099-day10.png&quot; &quot;patient099-day11.png&quot;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;patient100-day09.png&quot; &quot;patient100-day10.png&quot; &quot;patient100-day11.png&quot;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [10] &quot;patient101-day09.png&quot; &quot;patient101-day10.png&quot; &quot;patient101-day11.png&quot;</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [13] &quot;patient102-day09.png&quot; &quot;patient102-day10.png&quot; &quot;patient102-day11.png&quot;</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [16] &quot;patient103-day09.png&quot; &quot;patient103-day10.png&quot; &quot;patient103-day11.png&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">sort</span>(strex<span class="sc">::</span><span class="fu">str_alphord_nums</span>(poorly_ordered))</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;patient098-day09.png&quot; &quot;patient098-day10.png&quot; &quot;patient098-day11.png&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;patient099-day09.png&quot; &quot;patient099-day10.png&quot; &quot;patient099-day11.png&quot;</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;patient100-day09.png&quot; &quot;patient100-day10.png&quot; &quot;patient100-day11.png&quot;</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; [10] &quot;patient101-day09.png&quot; &quot;patient101-day10.png&quot; &quot;patient101-day11.png&quot;</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; [13] &quot;patient102-day09.png&quot; &quot;patient102-day10.png&quot; &quot;patient102-day11.png&quot;</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; [16] &quot;patient103-day09.png&quot; &quot;patient103-day10.png&quot; &quot;patient103-day11.png&quot;</span></span></code></pre></div>
 </div>
 
 

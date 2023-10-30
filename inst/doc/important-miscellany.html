@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2023-01-21" />
+<meta name="date" content="2023-10-30" />
 
 <title>Important Miscellany</title>
 
@@ -338,7 +338,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Important Miscellany</h1>
-<h4 class="date">2023-01-21</h4>
+<h4 class="date">2023-10-30</h4>
 
 
 
@@ -349,15 +349,15 @@ interesting have been given their own vignettes. However, the package
 was intended as a miscellany of useful functions, so the functions
 demonstrated here encapsulate the spirit of this package, i.e. functions
 that save R string manipulators time.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(strex)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(strex)</span></code></pre></div>
 </div>
 <div id="could-this-be-numeric" class="section level2">
 <h2>Could this be numeric?</h2>
 <p>Sometimes you don’t want to know whether something is numeric, just
 whether or not it could be. Now you can find out with
 <code>str_can_be_numeric()</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_can_be_numeric</span>(<span class="fu">c</span>(<span class="st">&quot;1a&quot;</span>, <span class="st">&quot;abc&quot;</span>, <span class="st">&quot;5&quot;</span>, <span class="st">&quot;2e7&quot;</span>, <span class="st">&quot;seven&quot;</span>))</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] FALSE FALSE  TRUE  TRUE FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">str_can_be_numeric</span>(<span class="fu">c</span>(<span class="st">&quot;1a&quot;</span>, <span class="st">&quot;abc&quot;</span>, <span class="st">&quot;5&quot;</span>, <span class="st">&quot;2e7&quot;</span>, <span class="st">&quot;seven&quot;</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; [1] FALSE FALSE  TRUE  TRUE FALSE</span></span></code></pre></div>
 </div>
 <div id="currency" class="section level2">
 <h2>Currency</h2>
@@ -369,125 +369,125 @@ returns the first currency amount. <code>str_last_currency()</code>
 returns the last. <code>str_nth_currency()</code> allows you to get the
 second, third and so on. <code>str_extract_currencies()</code> returns
 all currency amounts mentioned in a string.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Alan paid £5&quot;</span>, <span class="st">&quot;Joe paid $7&quot;</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_first_currency</span>(string)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   string_num       string curr_sym amount</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1          1 Alan paid £5        £      5</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2          2  Joe paid $7        $      7</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;€1 is $1.17&quot;</span>, <span class="st">&quot;£1 is $1.29&quot;</span>)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">str_nth_currency</span>(string, <span class="at">n =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   string_num      string curr_sym amount</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1          1 €1 is $1.17        €   1.00</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2          2 £1 is $1.29        $   1.29</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">str_last_currency</span>(string)  <span class="co"># only gets the first mentioned</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   string_num      string curr_sym amount</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1          1 €1 is $1.17        $   1.17</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2          2 £1 is $1.29        $   1.29</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">str_extract_currencies</span>(string)</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   string_num      string curr_sym amount</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1          1 €1 is $1.17        €   1.00</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2          1 €1 is $1.17        $   1.17</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3          2 £1 is $1.29        £   1.00</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4          2 £1 is $1.29        $   1.29</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Alan paid £5&quot;</span>, <span class="st">&quot;Joe paid $7&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">str_first_currency</span>(string)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;   string_num       string curr_sym amount</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; 1          1 Alan paid £5        £      5</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; 2          2  Joe paid $7        $      7</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;€1 is $1.17&quot;</span>, <span class="st">&quot;£1 is $1.29&quot;</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="fu">str_nth_currency</span>(string, <span class="at">n =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt;   string_num      string curr_sym amount</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; 1          1 €1 is $1.17        €   1.00</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; 2          2 £1 is $1.29        $   1.29</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="fu">str_last_currency</span>(string)  <span class="co"># only gets the first mentioned</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt;   string_num      string curr_sym amount</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; 1          1 €1 is $1.17        $   1.17</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; 2          2 £1 is $1.29        $   1.29</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="fu">str_extract_currencies</span>(string)</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt;   string_num      string curr_sym amount</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; 1          1 €1 is $1.17        €   1.00</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; 2          1 €1 is $1.17        $   1.17</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; 3          2 £1 is $1.29        £   1.00</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt; 4          2 £1 is $1.29        $   1.29</span></span></code></pre></div>
 </div>
 <div id="extract-a-single-element-of-a-string" class="section level2">
 <h2>Extract a single element of a string</h2>
 <p>This is a simple wrapper around <code>stringr::str_sub()</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">=</span> <span class="st">&quot;abcdefg&quot;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_sub</span>(string, <span class="dv">3</span>, <span class="dv">3</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;c&quot;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str_elem</span>(string, <span class="dv">3</span>)  <span class="co"># simpler and more exressive</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;c&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>string <span class="ot">=</span> <span class="st">&quot;abcdefg&quot;</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">str_sub</span>(string, <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;c&quot;</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">str_elem</span>(string, <span class="dv">3</span>)  <span class="co"># simpler and more exressive</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; [1] &quot;c&quot;</span></span></code></pre></div>
 </div>
 <div id="extract-numbers-and-non-numeric-elements" class="section level2">
 <h2>Extract numbers and non-numeric elements</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;aa1bbb2ccc3&quot;</span>, <span class="st">&quot;xyz7ayc8jzk99elephant&quot;</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_extract_numbers</span>(string)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1 2 3</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[2]]</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  7  8 99</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">str_extract_non_numerics</span>(string)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;aa&quot;  &quot;bbb&quot; &quot;ccc&quot;</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[2]]</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;xyz&quot;      &quot;ayc&quot;      &quot;jzk&quot;      &quot;elephant&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;aa1bbb2ccc3&quot;</span>, <span class="st">&quot;xyz7ayc8jzk99elephant&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">str_extract_numbers</span>(string)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; [1] 1 2 3</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; [1]  7  8 99</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="fu">str_extract_non_numerics</span>(string)</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; [1] &quot;aa&quot;  &quot;bbb&quot; &quot;ccc&quot;</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; [1] &quot;xyz&quot;      &quot;ayc&quot;      &quot;jzk&quot;      &quot;elephant&quot;</span></span></code></pre></div>
 </div>
 <div id="split-a-string-by-its-numbers" class="section level2">
 <h2>Split a string by its numbers</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;aa1bbb2ccc3&quot;</span>, <span class="st">&quot;xyz7ayc8jzk99elephant&quot;</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_split_by_numbers</span>(string)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;aa&quot;  &quot;1&quot;   &quot;bbb&quot; &quot;2&quot;   &quot;ccc&quot; &quot;3&quot;  </span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[2]]</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;xyz&quot;      &quot;7&quot;        &quot;ayc&quot;      &quot;8&quot;        &quot;jzk&quot;      &quot;99&quot;       &quot;elephant&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;aa1bbb2ccc3&quot;</span>, <span class="st">&quot;xyz7ayc8jzk99elephant&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">str_split_by_numbers</span>(string)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;aa&quot;  &quot;1&quot;   &quot;bbb&quot; &quot;2&quot;   &quot;ccc&quot; &quot;3&quot;  </span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;xyz&quot;      &quot;7&quot;        &quot;ayc&quot;      &quot;8&quot;        &quot;jzk&quot;      &quot;99&quot;       &quot;elephant&quot;</span></span></code></pre></div>
 </div>
 <div id="force-a-file-name-to-have-an-extension" class="section level2">
 <h2>Force a file name to have an extension</h2>
 <p>We can give files a given extension, leaving them alone if they
 already have it.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;spreadsheet1.csv&quot;</span>, <span class="st">&quot;spreadsheet2&quot;</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_give_ext</span>(string, <span class="st">&quot;csv&quot;</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;spreadsheet1.csv&quot; &quot;spreadsheet2.csv&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;spreadsheet1.csv&quot;</span>, <span class="st">&quot;spreadsheet2&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">str_give_ext</span>(string, <span class="st">&quot;csv&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;spreadsheet1.csv&quot; &quot;spreadsheet2.csv&quot;</span></span></code></pre></div>
 <p>If the file already has an extension, we can append one or replace
 it.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_give_ext</span>(string, <span class="st">&quot;xls&quot;</span>)  <span class="co"># append</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;spreadsheet1.csv.xls&quot; &quot;spreadsheet2.xls&quot;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_give_ext</span>(string, <span class="st">&quot;csv&quot;</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)  <span class="co"># replace</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;spreadsheet1.csv&quot; &quot;spreadsheet2.csv&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">str_give_ext</span>(string, <span class="st">&quot;xls&quot;</span>)  <span class="co"># append</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;spreadsheet1.csv.xls&quot; &quot;spreadsheet2.xls&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="fu">str_give_ext</span>(string, <span class="st">&quot;csv&quot;</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)  <span class="co"># replace</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;spreadsheet1.csv&quot; &quot;spreadsheet2.csv&quot;</span></span></code></pre></div>
 </div>
 <div id="strip-away-a-file-extension" class="section level2">
 <h2>Strip away a file extension</h2>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;spreadsheet1.csv&quot;</span>, <span class="st">&quot;spreadsheet2&quot;</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_before_last_dot</span>(string)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;spreadsheet1&quot; &quot;spreadsheet2&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;spreadsheet1.csv&quot;</span>, <span class="st">&quot;spreadsheet2&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">str_before_last_dot</span>(string)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;spreadsheet1&quot; &quot;spreadsheet2&quot;</span></span></code></pre></div>
 </div>
 <div id="remove-quoted-bits-from-a-string" class="section level2">
 <h2>Remove quoted bits from a string</h2>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">&quot;I hate having these </span><span class="sc">\&quot;</span><span class="st">quotes</span><span class="sc">\&quot;</span><span class="st"> in the middle of my strings.&quot;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(string)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; I hate having these &quot;quotes&quot; in the middle of my strings.</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str_remove_quoted</span>(string)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;I hate having these  in the middle of my strings.&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">&quot;I hate having these </span><span class="sc">\&quot;</span><span class="st">quotes</span><span class="sc">\&quot;</span><span class="st"> in the middle of my strings.&quot;</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">cat</span>(string)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; I hate having these &quot;quotes&quot; in the middle of my strings.</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">str_remove_quoted</span>(string)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; [1] &quot;I hate having these  in the middle of my strings.&quot;</span></span></code></pre></div>
 </div>
 <div id="split-camel-case" class="section level2">
 <h2>Split camel case</h2>
 <p>I’m not mad on CamelCase, I often want to deconstruct it.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;CamelVar1&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;CamelVar2&quot;</span>))</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_split_camel_case</span>(string)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Camel&quot; &quot;Var1&quot; </span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[2]]</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Camel&quot; &quot;Var2&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;CamelVar1&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;CamelVar2&quot;</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">str_split_camel_case</span>(string)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Camel&quot; &quot;Var1&quot; </span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Camel&quot; &quot;Var2&quot;</span></span></code></pre></div>
 </div>
 <div id="convert-a-string-to-a-vector" class="section level2">
 <h2>Convert a string to a vector</h2>
 <p>This is something I did a lot to avoid using regular expression.
 Don’t do it for that purpose. Learn regex. <a href="https://regexone.com/" class="uri">https://regexone.com/</a> is a
 very good start.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">&quot;R is good.&quot;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_to_vec</span>(string)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;R&quot; &quot; &quot; &quot;i&quot; &quot;s&quot; &quot; &quot; &quot;g&quot; &quot;o&quot; &quot;o&quot; &quot;d&quot; &quot;.&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">&quot;R is good.&quot;</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">str_to_vec</span>(string)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;R&quot; &quot; &quot; &quot;i&quot; &quot;s&quot; &quot; &quot; &quot;g&quot; &quot;o&quot; &quot;o&quot; &quot;d&quot; &quot;.&quot;</span></span></code></pre></div>
 </div>
 <div id="trim-anything-not-just-whitespace" class="section level2">
 <h2>Trim anything, not just whitespace</h2>
 <p>What if something is needlessly surrounded by parentheses and we want
 to get rid of them?</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">&quot;(((Why all the parentheses?)))&quot;</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>string <span class="sc">%&gt;%</span> </span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_trim_anything</span>(<span class="fu">coll</span>(<span class="st">&quot;(&quot;</span>), <span class="at">side =</span> <span class="st">&quot;left&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_trim_anything</span>(<span class="fu">coll</span>(<span class="st">&quot;)&quot;</span>), <span class="at">side =</span> <span class="st">&quot;r&quot;</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Why all the parentheses?&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">&quot;(((Why all the parentheses?)))&quot;</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>string <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  <span class="fu">str_trim_anything</span>(<span class="fu">coll</span>(<span class="st">&quot;(&quot;</span>), <span class="at">side =</span> <span class="st">&quot;left&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="fu">str_trim_anything</span>(<span class="fu">coll</span>(<span class="st">&quot;)&quot;</span>), <span class="at">side =</span> <span class="st">&quot;r&quot;</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Why all the parentheses?&quot;</span></span></code></pre></div>
 </div>
 <div id="remove-duplicated-bits-of-strings" class="section level2">
 <h2>Remove duplicated bits of strings</h2>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;I often write the word *my* twice in a row in my my sentences.&quot;</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_singleize</span>(string, <span class="st">&quot; my&quot;</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;I often write the word *my* twice in a row in my sentences.&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;I often write the word *my* twice in a row in my my sentences.&quot;</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">str_singleize</span>(string, <span class="st">&quot; my&quot;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;I often write the word *my* twice in a row in my sentences.&quot;</span></span></code></pre></div>
 </div>
 
 
