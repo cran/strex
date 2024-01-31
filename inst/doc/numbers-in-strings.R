@@ -42,13 +42,18 @@ str_last_number_before_first(img_names, "biopsy", decimals = TRUE)
 data.frame(img_names,
   patient = str_first_number_after_first(img_names, "patient"),
   cell = str_first_number_after_first(img_names, "cell"),
-  hrs_after_biop = str_last_number_before_first(img_names, "biop", 
-                                                decimals = TRUE)
+  hrs_after_biop = str_last_number_before_first(img_names, "biop",
+    decimals = TRUE
+  )
 )
 
 ## ----scicom-------------------------------------------------------------------
 string <- c("$1,000", "$1e6")
-str_first_number(string, commas = TRUE, sci = TRUE)
+str_first_number(string, big_mark = ",", sci = TRUE)
+
+## ----underscore-or-space------------------------------------------------------
+string <- c("1_000", "1 000", "1_000 000", "1 000_000")
+str_first_number(string, big_mark = "_ ")
 
 ## ----all-number-functions-----------------------------------------------------
 str_subset(ls("package:strex"), "number")

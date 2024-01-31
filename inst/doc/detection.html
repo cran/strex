@@ -398,11 +398,10 @@ but FWIW, it’s faster to convert to regex using
 <span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">min_iterations =</span> <span class="dv">100</span></span>
 <span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>)</span>
 <span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2 × 6</span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt;   expression                                                     min   median</span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt;   &lt;bch:expr&gt;                                                &lt;bch:tm&gt; &lt;bch:tm&gt;</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; 1 str_detect_all(rep(&quot;*&quot;, 1000), rep(str_escape(&quot;*&quot;), 555))    243ms    314ms</span></span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; 2 str_detect_all(rep(&quot;*&quot;, 1000), coll(rep(&quot;*&quot;, 555)))          394ms    429ms</span></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; # ℹ 3 more variables: `itr/sec` &lt;dbl&gt;, mem_alloc &lt;bch:byt&gt;, `gc/sec` &lt;dbl&gt;</span></span></code></pre></div>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt;   expression                             min median `itr/sec` mem_alloc `gc/sec`</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt;   &lt;bch:expr&gt;                           &lt;bch&gt; &lt;bch:&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; 1 &quot;str_detect_all(rep(\&quot;*\&quot;, 1000), r… 171ms  184ms      5.49  162.22KB    0    </span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; 2 &quot;str_detect_all(rep(\&quot;*\&quot;, 1000), c… 159ms  161ms      6.19    4.31MB    0.688</span></span></code></pre></div>
 </div>
 
 

@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2023-10-30" />
+<meta name="date" content="2024-01-31" />
 
 <title>Important Miscellany</title>
 
@@ -338,7 +338,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Important Miscellany</h1>
-<h4 class="date">2023-10-30</h4>
+<h4 class="date">2024-01-31</h4>
 
 
 
@@ -379,7 +379,7 @@ all currency amounts mentioned in a string.</p>
 <span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt;   string_num      string curr_sym amount</span></span>
 <span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; 1          1 €1 is $1.17        €   1.00</span></span>
 <span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; 2          2 £1 is $1.29        $   1.29</span></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="fu">str_last_currency</span>(string)  <span class="co"># only gets the first mentioned</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="fu">str_last_currency</span>(string) <span class="co"># only gets the first mentioned</span></span>
 <span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt;   string_num      string curr_sym amount</span></span>
 <span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; 1          1 €1 is $1.17        $   1.17</span></span>
 <span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; 2          2 £1 is $1.29        $   1.29</span></span>
@@ -393,10 +393,10 @@ all currency amounts mentioned in a string.</p>
 <div id="extract-a-single-element-of-a-string" class="section level2">
 <h2>Extract a single element of a string</h2>
 <p>This is a simple wrapper around <code>stringr::str_sub()</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>string <span class="ot">=</span> <span class="st">&quot;abcdefg&quot;</span></span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">&quot;abcdefg&quot;</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">str_sub</span>(string, <span class="dv">3</span>, <span class="dv">3</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;c&quot;</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">str_elem</span>(string, <span class="dv">3</span>)  <span class="co"># simpler and more exressive</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">str_elem</span>(string, <span class="dv">3</span>) <span class="co"># simpler and more exressive</span></span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; [1] &quot;c&quot;</span></span></code></pre></div>
 </div>
 <div id="extract-numbers-and-non-numeric-elements" class="section level2">
@@ -434,9 +434,9 @@ already have it.</p>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;spreadsheet1.csv&quot; &quot;spreadsheet2.csv&quot;</span></span></code></pre></div>
 <p>If the file already has an extension, we can append one or replace
 it.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">str_give_ext</span>(string, <span class="st">&quot;xls&quot;</span>)  <span class="co"># append</span></span>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">str_give_ext</span>(string, <span class="st">&quot;xls&quot;</span>) <span class="co"># append</span></span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;spreadsheet1.csv.xls&quot; &quot;spreadsheet2.xls&quot;</span></span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="fu">str_give_ext</span>(string, <span class="st">&quot;csv&quot;</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)  <span class="co"># replace</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="fu">str_give_ext</span>(string, <span class="st">&quot;csv&quot;</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>) <span class="co"># replace</span></span>
 <span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;spreadsheet1.csv&quot; &quot;spreadsheet2.csv&quot;</span></span></code></pre></div>
 </div>
 <div id="strip-away-a-file-extension" class="section level2">
@@ -478,8 +478,8 @@ very good start.</p>
 <p>What if something is needlessly surrounded by parentheses and we want
 to get rid of them?</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">&quot;(((Why all the parentheses?)))&quot;</span></span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>string <span class="sc">%&gt;%</span> </span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  <span class="fu">str_trim_anything</span>(<span class="fu">coll</span>(<span class="st">&quot;(&quot;</span>), <span class="at">side =</span> <span class="st">&quot;left&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>string <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  <span class="fu">str_trim_anything</span>(<span class="fu">coll</span>(<span class="st">&quot;(&quot;</span>), <span class="at">side =</span> <span class="st">&quot;left&quot;</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="fu">str_trim_anything</span>(<span class="fu">coll</span>(<span class="st">&quot;)&quot;</span>), <span class="at">side =</span> <span class="st">&quot;r&quot;</span>)</span>
 <span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Why all the parentheses?&quot;</span></span></code></pre></div>
 </div>

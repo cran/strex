@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2023-10-30" />
+<meta name="date" content="2024-01-31" />
 
 <title>Before and After</title>
 
@@ -338,7 +338,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Before and After</h1>
-<h4 class="date">2023-10-30</h4>
+<h4 class="date">2024-01-31</h4>
 
 
 
@@ -388,8 +388,8 @@ friends <code>str_before_first()</code> and
 did.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>get_task <span class="ot">&lt;-</span> <span class="cf">function</span>(string, name) {</span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="fu">str_c</span>(name, <span class="st">&quot; did the &quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="fu">str_after_first</span>(string, .) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="fu">str_c</span>(name, <span class="st">&quot; did the &quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="fu">str_after_first</span>(string, .) <span class="sc">%&gt;%</span></span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="fu">str_before_first</span>(<span class="st">&quot;[</span><span class="sc">\\</span><span class="st">.,]&quot;</span>)</span>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>}</span>
 <span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="fu">get_task</span>(string, <span class="st">&quot;James&quot;</span>)</span>
