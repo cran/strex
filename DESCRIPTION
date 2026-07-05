@@ -1,6 +1,6 @@
 Package: strex
 Title: Extra String Manipulation Functions
-Version: 2.0.1
+Version: 2.1.0
 Authors@R: 
     person("Rory", "Nolan", , "rorynoolan@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5239-4043"))
@@ -26,10 +26,10 @@ Biarch: TRUE
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 NeedsCompilation: yes
-Packaged: 2024-10-02 03:14:47 UTC; rnolan
-Author: Rory Nolan [aut, cre] (<https://orcid.org/0000-0002-5239-4043>)
+Packaged: 2026-07-05 15:32:15 UTC; rnolan
+Author: Rory Nolan [aut, cre] (ORCID: <https://orcid.org/0000-0002-5239-4043>)
 Maintainer: Rory Nolan <rorynoolan@gmail.com>
 Repository: CRAN
-Date/Publication: 2024-10-03 23:00:06 UTC
+Date/Publication: 2026-07-05 16:10:11 UTC

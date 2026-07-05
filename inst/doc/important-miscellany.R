@@ -11,12 +11,14 @@ library(strex)
 str_can_be_numeric(c("1a", "abc", "5", "2e7", "seven"))
 
 ## ----error=TRUE---------------------------------------------------------------
+try({
 string <- c("Alan paid £5", "Joe paid $7")
 str_first_currency(string)
 string <- c("€1 is $1.17", "£1 is $1.29")
 str_nth_currency(string, n = c(1, 2))
 str_last_currency(string) # only gets the first mentioned
 str_extract_currencies(string)
+})
 
 ## ----str-elem-----------------------------------------------------------------
 string <- "abcdefg"
